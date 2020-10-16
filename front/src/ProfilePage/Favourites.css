@@ -1,0 +1,16 @@
+.favourites-title{
+    color:black;
+    font-size:1.25em;
+    margin-bottom:3px;
+    margin: 0px auto 5px;
+    
+}
+
+.load-placeholder{
+    color:black;
+    font-size:1.5em;
+}
+
+.song-block{
+    margin-bottom:10px;
+}
