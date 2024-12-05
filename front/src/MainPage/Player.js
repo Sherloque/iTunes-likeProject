@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { toFavourites } from '../store/action.js'
 import './Player.css'
 import { ReactComponent as PlaySVG } from './logos/play.svg';
@@ -110,7 +110,7 @@ class Player extends React.Component {
                     )}
                 <audio ref={ref => (this.player = ref)} />
 
-                <button className = "player-btn" hidden={window.location.pathname==="/profile"? true : false} onClick={() => this.props.toFavourites(jwt_decode(localStorage.token).sub._id,track.id, track.artist.name,track.title, track.preview)}><svg className="svg"><FavouritesSVG/></svg></button>
+                <button className = "player-btn" hidden={window.location.pathname==="/profile"? true : false} onClick={() => this.props.toFavourites(jwtDecode(localStorage.token).sub._id,track.id, track.artist.name,track.title, track.preview)}><svg className="svg"><FavouritesSVG/></svg></button>
             </>
         );
     }

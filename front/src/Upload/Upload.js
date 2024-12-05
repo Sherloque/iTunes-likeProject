@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dropzone from '../Upload/Dropzone'
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import Progress from '../Upload/Progress'
 import './Upload.css'
 
@@ -112,7 +112,7 @@ class Upload extends React.Component {
 
       const formData = new FormData();
       formData.append("file", file, file.name);
-      formData.append("field", jwt_decode(localStorage.token).sub._id);
+      formData.append("field", jwtDecode(localStorage.token).sub._id);
       req.open("POST", "/upload");
       req.setRequestHeader('Authorization', 'Bearer ' + localStorage.token)
       req.send(formData);

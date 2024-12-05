@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import history from '../history/history';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import Chart from './Chart'
 import RecentUploads from './RecentUploads'
 import './MainPage.css'
@@ -23,7 +23,7 @@ class MainPage extends React.Component {
         return (
             <div >
                 {(localStorage.token) ? (
-                    <div className="box"><h1>Привет, {jwt_decode(localStorage.token).sub.login}</h1>
+                    <div className="box"><h1>Привет, {jwtDecode(localStorage.token).sub.login}</h1>
                         <button className="mainpage-profile-btn"><Link to="/profile" style={{ color: "white", textDecoration: 'none' }}>Профиль</Link></button>
                         <button className="mainpage-search-btn"><Link to="/search" style={{ color: "white", textDecoration: 'none' }}>Поиск</Link></button>
                         <button className="mainpage-logout-btn" onClick={logoutUser}>Выйти</button>

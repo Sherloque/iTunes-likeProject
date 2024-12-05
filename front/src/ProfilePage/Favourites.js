@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import {fetchPersonalFavourites} from '../store/action.js'
 import Player from '../MainPage/Player'
 import './Favourites.css'
@@ -19,7 +19,7 @@ const mapDispatchToProps = {
   
 class Favourites extends React.Component {
     componentDidMount() {
-        this.props.fetchPersonalFavourites(jwt_decode(localStorage.token).sub._id);
+        this.props.fetchPersonalFavourites(jwtDecode(localStorage.token).sub._id);
       }
 
     render() {

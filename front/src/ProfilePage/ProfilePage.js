@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { changeUserInfo } from '../store/action.js'
 import Favourites from './Favourites'
 import UserUploads from './UserUploads'
@@ -25,11 +25,11 @@ class ProfilePage extends React.Component {
 
 
         this.state = {
-            login: (localStorage.token) ? jwt_decode(localStorage.token).sub.login : "",
+            login: (localStorage.token) ? jwtDecode(localStorage.token).sub.login : "",
             password: "",
             verpass: "",
-            firstname: (localStorage.token) ? jwt_decode(localStorage.token).sub.firstname : "",
-            lastname: (localStorage.token) ? jwt_decode(localStorage.token).sub.lastname : "",
+            firstname: (localStorage.token) ? jwtDecode(localStorage.token).sub.firstname : "",
+            lastname: (localStorage.token) ? jwtDecode(localStorage.token).sub.lastname : "",
             valid:true,
             validPass:true
         }
@@ -57,7 +57,7 @@ class ProfilePage extends React.Component {
                 <p className="input-label">Новый пароль (опционально):<input className="profile-input"  value={this.state.password} type="password" onChange={this.onChange4}></input></p>
                 <p className="input-label">Повторите новый пароль:<input className="profile-input" value={this.state.subpass} type="password" onChange={this.onChange5}></input></p>
                 <button className="profile-changeInfo-btn" disabled={!(this.state.valid && this.state.validPass)}
-                    onClick={() => this.props.onSend(jwt_decode(localStorage.token).sub._id,this.state.login, this.state.firstname, this.state.lastname, (this.state.password) ? (this.state.password) : null, console.log(this.state))}
+                    onClick={() => this.props.onSend(jwtDecode(localStorage.token).sub._id,this.state.login, this.state.firstname, this.state.lastname, (this.state.password) ? (this.state.password) : null, console.log(this.state))}
                 >Изменить данные</button>
                 <button className="profile-tomain-btn"><Link to="/" style={{color:"white", textDecoration: 'none' }}>На главную</Link></button>
 

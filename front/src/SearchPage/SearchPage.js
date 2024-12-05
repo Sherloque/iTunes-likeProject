@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import history from '../history/history';
-import jwt_decode from 'jwt-decode';
 import { fetchSearch } from '../store/action.js'
 import Player from '../MainPage/Player'
 import '../MainPage/MainPage.css'
