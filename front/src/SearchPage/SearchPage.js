@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchSearch } from '../store/action.js'
 import Player from '../MainPage/Player'
-import '../MainPage/MainPage.css'
-import './SearchPage.css'
 
 const mapStateToProps = store => {
     return (console.log(store), {

@@ -1,121 +1,140 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { jwtDecode } from 'jwt-decode';
-import { toFavourites } from '../store/action.js'
-import './Player.css'
-import { ReactComponent as PlaySVG } from './logos/play.svg';
-import { ReactComponent as PauseSVG } from './logos/pause.svg';
-import { ReactComponent as StopSVG } from './logos/stop.svg';
-import { ReactComponent as FavouritesSVG } from './logos/bookmark.svg';
-import { ReactComponent as DeleteSVG } from './logos/cancel.svg';
-
-
-const mapDispatchToProps = {
-    toFavourites:toFavourites
-};
-
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import { toFavourites } from "../store/action.js";
+import "./Player.css";
+import { ReactComponent as PlaySVG } from "./logos/play.svg";
+import { ReactComponent as PauseSVG } from "./logos/pause.svg";
+import { ReactComponent as StopSVG } from "./logos/stop.svg";
+import { ReactComponent as FavouritesSVG } from "./logos/bookmark.svg";
 
 function getTime(time) {
-    if (!isNaN(time)) {
-        return (
-            Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2)
-        );
-    }
+  if (!isNaN(time)) {
+    return (
+      Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2)
+    );
+  }
+  return "0:00";
 }
 
+const Player = ({ track }) => {
+  const [playerState, setPlayerState] = useState("stopped");
+  const [currentSong, setCurrentSong] = useState(null);
+  const [trackDuration, setTrackDuration] = useState(null);
+  const [currentTime, setCurrentTime] = useState(null);
+  const playerRef = useRef(null);
+  const dispatch = useDispatch();
 
-class Player extends React.Component {
+  useEffect(() => {
+    const player = playerRef.current;
+    const handleTimeUpdate = () => {
+      setCurrentTime(player.currentTime);
+      setTrackDuration(player.duration);
 
+      if (player.currentTime === player.duration) {
+        setPlayerState("stopped");
+      }
+    };
 
-    state = {
-        player: "stopped",
-        currentSong: null,
-        trackDuration: null,
-        currentTime: null,
-        profile:false,
+    player.addEventListener("timeupdate", handleTimeUpdate);
+    return () => player.removeEventListener("timeupdate", handleTimeUpdate);
+  }, []);
+
+  useEffect(() => {
+    const player = playerRef.current;
+
+    if (currentSong) {
+      player.src = currentSong;
+      player.play();
+      setPlayerState("playing");
     }
-    componentDidMount() {
-        this.player.addEventListener("timeupdate", e => {
-            this.setState({
-                currentTime: e.target.currentTime,
-                trackDuration: e.target.duration
-            });
-            if(this.state.currentTime === this.state.trackDuration)
-            (this.setState({player:"stopped"}))
-        });
+  }, [currentSong]);
+
+  useEffect(() => {
+    const player = playerRef.current;
+
+    if (playerState === "paused") {
+      player.pause();
+    } else if (playerState === "stopped") {
+      player.pause();
+      player.currentTime = 0;
+      setCurrentSong(null);
+    } else if (playerState === "playing") {
+      player.play();
     }
+  }, [playerState]);
 
+  const handleAddToFavourites = () => {
+    const userId = jwtDecode(localStorage.token).sub._id;
+    dispatch(
+      toFavourites(
+        userId,
+        track.id,
+        track.artist.name,
+        track.title,
+        track.preview
+      )
+    );
+  };
 
+  const currentTimeFormatted = getTime(currentTime);
+  const trackDurationFormatted = getTime(trackDuration);
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.state.currentSong !== prevState.currentSong) {
-            let track = this.state.currentSong;
-            if (track) {
-                this.player.src = track;
-                this.player.play();
-                this.setState({ player: "playing", trackDuration: this.player.trackDuration });
-            }
-        }
-        if (this.state.player !== prevState.player) {
-            if (this.state.player === "paused") {
-                this.player.pause();
-            } else if (this.state.player === "stopped") {
-                this.player.pause();
-                this.player.currentTime = 0;
-                this.setState({ currentSong: null });
-            } else if (
-                this.state.player === "playing" &&
-                prevState.player === "paused"
-            ) {
-                this.player.play();
-            }
-        }
-    }
+  return (
+    <>
+      {playerState === "stopped" && (
+        <button
+          className="player-btn"
+          onClick={() => {
+            setCurrentSong(track.preview);
+            setPlayerState("playing");
+          }}
+        >
+          <PlaySVG className="svg" />
+        </button>
+      )}
 
-    render() {
-        const currentTime = getTime(this.state.currentTime);
-        const trackDuration = getTime(this.state.trackDuration);
-        const { track } = this.props;
-        return (
-            <>
-                {this.state.player === "stopped" && (
-                    <button className = "player-btn" onClick={() => this.setState({ currentSong: track.preview, player: "playing" })}><svg className="svg"><PlaySVG/></svg></button>
-                )}
+      {playerState === "paused" && (
+        <button
+          className="player-btn"
+          onClick={() => setPlayerState("playing")}
+        >
+          <PlaySVG className="svg" />
+        </button>
+      )}
 
+      {playerState === "playing" && (
+        <button className="player-btn" onClick={() => setPlayerState("paused")}>
+          <PauseSVG className="svg" />
+        </button>
+      )}
 
-                {this.state.player === "paused" && (
-                    <button className = "player-btn" onClick={() => this.setState({ player: "playing" })}>
-                        <svg className="svg"><PlaySVG/></svg>
-            </button>
-                )}
-                {this.state.player === "playing" && (
-                    <button className = "player-btn" onClick={() => this.setState({ player: "paused" })}>
-                        <svg className="svg"><PauseSVG/></svg>
-            </button>
-                )}
-                {this.state.player === "playing" || this.state.player === "paused" ? (
-                    <button className = "player-btn" onClick={() => this.setState({ player: "stopped" })}>
-                       <svg className="svg"><StopSVG/></svg>
-            </button>
-                ) : (
-                        ""
-                    )}
-                {this.state.player === "playing" || this.state.player === "paused" ? (
-                    <div className="player-timer">
-                        {currentTime} / {trackDuration}
-                       
-                    </div>
-                ) : (
-                        ""
-                    )}
-                <audio ref={ref => (this.player = ref)} />
+      {(playerState === "playing" || playerState === "paused") && (
+        <button
+          className="player-btn"
+          onClick={() => setPlayerState("stopped")}
+        >
+          <StopSVG className="svg" />
+        </button>
+      )}
 
-                <button className = "player-btn" hidden={window.location.pathname==="/profile"? true : false} onClick={() => this.props.toFavourites(jwtDecode(localStorage.token).sub._id,track.id, track.artist.name,track.title, track.preview)}><svg className="svg"><FavouritesSVG/></svg></button>
-            </>
-        );
-    }
-}
+      {(playerState === "playing" || playerState === "paused") && (
+        <div className="player-timer">
+          {currentTimeFormatted} / {trackDurationFormatted}
+        </div>
+      )}
 
+      <audio ref={playerRef} />
 
-let ConnectedPlayer = connect(null, mapDispatchToProps)(Player);
-export default ConnectedPlayer;
+      <button
+        className="player-btn"
+        hidden={window.location.pathname === "/profile"}
+        onClick={handleAddToFavourites}
+      >
+        <FavouritesSVG className="svg" />
+      </button>
+    </>
+  );
+};
+
+export default Player;

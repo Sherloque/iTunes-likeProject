@@ -1,37 +1,38 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { fetchHotChart } from '../store/action.js'
-import Player from './Player'
-import './Chart.css'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchHotChart } from "../store/action.js";
+import Player from "./Player";
+import "./Chart.scss";
 
-const mapStateToProps = store => {
-    return ({
-        chartSongs: store.chart.chartSongs
-    })
+const Chart = () => {
+  const dispatch = useDispatch();
+  const chartSongs = useSelector((state) => state.chart.chartSongs);
+
+  useEffect(() => {
+    dispatch(fetchHotChart());
+  }, [dispatch]);
+
+  return (
+    <>
+      {chartSongs.data ? (
+        chartSongs.data.map((item, i) => (
+          <div className="song" key={i}>
+            <p className="chart-position">{item.position}</p>
+            <img className="song-cover" src={item.album.cover} />
+            <div className="song-description">
+              <p className="song-title">{item.title}</p>
+              <p className="song-artist">{item.artist.name}</p>
+            </div>
+            <p className="song-duration">{Math.floor(item.duration / 60) + ":" + ("0" + Math.floor(item.duration % 60)).slice(-2)}</p>
+
+            <Player track={item}></Player>
+          </div>
+        ))
+      ) : (
+        <p className="load-placeholder">Loading...</p>
+      )}
+    </>
+  );
 };
 
-
-const mapDispatchToProps = {
-    fetchHotChart
-};
-
-class Chart extends React.Component {
-    componentDidMount() {
-        this.props.fetchHotChart();
-    }
-
-    render() {
-        const { chartSongs } = this.props
-        return (
-            <>
-                {(chartSongs.data) ? (chartSongs.data.map((item, i) => (<div className="song-block" key={i}><p className="chart-title">{item.position + "." + item.artist.name + " - " + item.title}</p><Player track={item}></Player></div>)))
-                    : (<p className="load-placeholder">LOADING...</p>)}
-            </>
-        );
-    }
-
-}
-
-let ConnectedChart = connect(mapStateToProps, mapDispatchToProps)(Chart);
-
-export default ConnectedChart;
+export default Chart;

@@ -1,50 +1,116 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import history from '../history/history';
-import { jwtDecode } from 'jwt-decode';
-import Chart from './Chart'
-import RecentUploads from './RecentUploads'
-import './MainPage.css'
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import Chart from "./Chart";
+import RecentUploads from "./RecentUploads";
+import "./MainPage.scss";
+import { LoginIcon, ProfileIcon, SignUpIcon, LogoutIcon } from "assets";
 
-const mapStateToProps = store => ({
-    User: store.currentUser,
-});
+const MainPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.currentUser);
 
-const logoutUser = () => ({
-    type: 'LOGOUT_USER',
-    action: localStorage.removeItem("token")
-}, history.push("/"))
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch({ type: "LOGOUT_USER" });
+    navigate("/");
+  };
 
+  const token = localStorage.getItem("token");
+  const userLogin = token ? jwtDecode(token).sub.login : null;
 
+  return (
+    <div className="mainpage-container">
+      <header className="mainpage-header">
+        <div className="mainpage-header-platformname">PLATFORMNAME</div>
+        <nav className="mainpage-nav">
+          {token ? (
+            <>
+              <Link to="/profile" className="nav-link">
+                Profile <ProfileIcon className="nav-icon" />
+              </Link>
+              <Link className="nav-link" onClick={handleLogout}>
+                Logout <LogoutIcon className="nav-icon" />
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/signup" className="nav-link">
+                Registration <SignUpIcon className="nav-icon" />
+              </Link>
+              <Link to="/login" className="nav-link">
+                Login <LoginIcon className="nav-icon" />
+              </Link>
+            </>
+          )}
+        </nav>
+      </header>
 
-class MainPage extends React.Component {
-    render() {
-        return (
-            <div >
-                {(localStorage.token) ? (
-                    <div className="box"><h1>Привет, {jwtDecode(localStorage.token).sub.login}</h1>
-                        <button className="mainpage-profile-btn"><Link to="/profile" style={{ color: "white", textDecoration: 'none' }}>Профиль</Link></button>
-                        <button className="mainpage-search-btn"><Link to="/search" style={{ color: "white", textDecoration: 'none' }}>Поиск</Link></button>
-                        <button className="mainpage-logout-btn" onClick={logoutUser}>Выйти</button>
-                        <h1>DEEZER HOT 10 CHART</h1>
-                        <Chart></Chart>
-                        <h1>Последние загрузки пользователей</h1>
-                        <RecentUploads></RecentUploads>
-                    </div>
+      <main className="mainpage-main">
+        {token ? (
+          <>
+            <section className="welcome-section">
+              <div className="welcome-section-greeting">
+                <h1>Hey, {userLogin}!</h1>
+              </div>
+              <div className="banner">
+                <div className="banner-info">
+                  <h2 className="banner-info-platformname">PLATFORMNAME</h2>
+                  <div className="banner-info-blur-wrapper">
+                    <h2 className="banner-info-subtitle">
+                      Discover, Share, Upload!
+                    </h2>
+                  </div>
+                  <p className="banner-info-description">
+                    Upload Your Beat, Feel the Music Heat.
+                  </p>
+                </div>
+                <img
+                  src={require("../assets/banner.png")}
+                  alt="Music Banner"
+                  className="banner-image"
+                />
+              </div>
+            </section>
 
-                ) : (
-                        <div className="main-box">
-                            <button className="mainpage-login-btn"><Link to="/login" style={{ color: "white", textDecoration: 'none' }}>Войти</Link></button>
-                            <button className="mainpage-signup-btn"><Link to="/signup" style={{ color: "white", textDecoration: 'none' }}>Зарегистрироваться</Link></button>
-                        </div>
-                    )}
-            </div>
-        );
-    }
+            <section className="chart-section">
+              <input
+                type="text"
+                className="chart-section-search"
+                placeholder="Search..."
+              />
+              <h2>Deezer Hot 10 Chart</h2>
+              <Chart />
+            </section>
 
-}
+            <section className="uploads-section">
+              <h2>Recent Uploads</h2>
+              <RecentUploads />
+            </section>
+          </>
+        ) : (
+          <section className="auth-section">
+            <button className="mainpage-login-btn">
+              <Link to="/login" className="mainpage-link">
+                Войти
+              </Link>
+            </button>
+            <button className="mainpage-signup-btn">
+              <Link to="/signup" className="mainpage-link">
+                Зарегистрироваться
+              </Link>
+            </button>
+          </section>
+        )}
+      </main>
 
-let ConnectedMainPage = connect(mapStateToProps)(MainPage);
+      <footer className="mainpage-footer">
+        <p>&copy; 2024 PLATFORMNAME. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+};
 
-export default ConnectedMainPage;
+export default MainPage;
