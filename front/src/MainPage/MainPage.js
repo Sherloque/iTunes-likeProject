@@ -109,6 +109,10 @@ const MainPage = () => {
       <footer className="mainpage-footer">
         <p>&copy; 2024 PLATFORMNAME. All rights reserved.</p>
       </footer>
+      <div class="background-effect effect-1"></div>
+      <div class="background-effect effect-2"></div>
+      <div class="background-effect effect-3"></div>
+      <div class="background-effect effect-4"></div>
     </div>
   );
 };
