@@ -1,58 +1,146 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import {signUser} from '../store/action.js'
-import './SignUpPage.css'
+import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signUser } from "../store/action.js";
+import "./SignUpPage.scss";
 
+const SignUpPage = () => {
+  const [formData, setFormData] = useState({
+    login: "",
+    password: "",
+    subpass: "",
+    firstname: "",
+    lastname: "",
+  });
+  const [validPass, setValidPass] = useState(false);
+  const [valid, setValid] = useState(false);
 
+  const dispatch = useDispatch();
 
-class SignUpPage extends React.Component {
-  constructor(props) {
-    super(props);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
+  const validatePass = useCallback(
+    () => formData.password === formData.subpass,
+    [formData.password, formData.subpass]
+  );
 
-    this.state = {
-      login: "",
-      password: "",
-      subpass:"",
-      firstname: "",
-      lastname: "",
-      validPass:false,
-      valid:false
-    }
+  const validateForm = useCallback(
+    () =>
+      formData.login.length > 0 &&
+      formData.firstname.length > 0 &&
+      formData.lastname.length > 0,
+    [formData.login, formData.firstname, formData.lastname]
+  );
 
-    this.onChange1 = e => this.setState({ login: e.target.value, valid:this.validateSULogin(e.target.value) ? true: false })
-    this.onChange2 = e => this.setState({ password: e.target.value, validPass:this.validatePass(e.target.value) ? true : false })
-    this.onChange3 = e => this.setState({ subpass: e.target.value, validPass:this.validateSubPass(e.target.value) ? true : false })
-    this.onChange4 = e => this.setState({ firstname: e.target.value, valid:this.validateSUFirstname(e.target.value) ? true: false })
-    this.onChange5 = e => this.setState({ lastname: e.target.value, valid:this.validateSULastname(e.target.value) ? true: false })
-    this.validatePass = str => str === this.state.subpass
-    this.validateSubPass = str => str === this.state.password
-    this.validateSULogin = str => str.length>0 &&  (this.state.lastname.length >0) && this.state.firstname.length >0
-    this.validateSUFirstname = str => str.length>0 && (this.state.login.length >0) && this.state.lastname.length >0
-    this.validateSULastname = str => str.length>0 && (this.state.login.length >0) && this.state.firstname.length >0
-  }
-  render() {
-    return (
-      <>
-      <div className="sign-box">
-        <h1>Регистрация</h1>
-        <input required className="login" type="text" value={this.state.login} onChange={this.onChange1} placeholder="login"></input>
-        <input required className="password" type="password" value={this.state.password} onChange={this.onChange2} placeholder="password"></input>
-        <input className="password" type="password" value={this.state.subpass} onChange={this.onChange3} placeholder="repeat password"></input>
-        <input className="login" type="text" value={this.state.irstname} onChange={this.onChange4} placeholder="Firstname"></input>
-        <input className="login" type="text" value={this.state.lastname} onChange={this.onChange5} placeholder="Lastname"></input>
-        <button className="signup-btn" disabled={!(this.state.valid && this.state.validPass)}
-          onClick={() => this.props.onSend(this.state.login, this.state.password, this.state.firstname, this.state.lastname)}
-        >Зарегистрироваться</button>
-        <button className="login-btn"><Link to="/login" style={{color:"white", textDecoration: 'none' }}>Залогиниться</Link></button>
-        <button className="cancel-btn"><Link to="/" style={{color:"white", textDecoration: 'none' }}>Отмена</Link></button>
-        </div>
-      </>
+  useEffect(() => {
+    setValid(validateForm());
+    setValidPass(validatePass());
+  }, [formData, validateForm, validatePass]);
+
+  const handleSignUp = () => {
+    dispatch(
+      signUser(
+        formData.login,
+        formData.password,
+        formData.firstname,
+        formData.lastname
+      )
     );
-  }
-}
+  };
 
-let ConnectedSignUpPage = connect(null, { onSend: signUser })(SignUpPage)
+  return (
+    <div className="signpage-container">
+      <div className="sign-box">
+        <div className="sign-box-login">
+          <h1 className="sign-box-login-heading">WELCOME BACK!</h1>
+          <button className="sign-box-login-btn">
+            <Link to="/login">Sign In</Link>
+          </button>
+        </div>
+        <div className="sign-box-form">
+          <h1 className="sign-box-form-heading">Create Account</h1>
+          <div className="sign-inputwrapper">
+            <label for="login">Username</label>
+            <input
+              required
+              className="sign-input"
+              type="text"
+              id="login"
+              name="login"
+              value={formData.login}
+              onChange={handleChange}
+              placeholder="Enter your username"
+            />
+          </div>
+          <div className="sign-inputwrapper">
+            <label for="password">Password</label>
+            <input
+              required
+              className="sign-input"
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+            />
+          </div>
+          <div className="sign-inputwrapper">
+            <label for="subpass">Repeat password</label>
+            <input
+              className="sign-input"
+              type="password"
+              id="subpass"
+              name="subpass"
+              value={formData.subpass}
+              onChange={handleChange}
+              placeholder="Repeat your password"
+            />
+          </div>
+          <div className="sign-inputwrapper">
+            <label for="firstname">Firstname</label>
+            <input
+              className="sign-input"
+              type="text"
+              id="firstname"
+              name="firstname"
+              value={formData.firstname}
+              onChange={handleChange}
+              placeholder="Enter your firstname"
+            />
+          </div>
+          <div className="sign-inputwrapper">
+            <label for="lastname">Lastname</label>
+            <input
+              className="sign-input"
+              type="text"
+              id="lastname"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+              placeholder="Enter your lastname"
+            />
+          </div>
 
-export default ConnectedSignUpPage;
+          <button
+            className={`signup-btn ${!valid ? "disabled-btn" : ""}`}
+            disabled={!(valid && validPass)}
+            onClick={handleSignUp}
+          >
+            Sign Up
+          </button>
+          <button className="cancel-btn">
+            <Link to="/feed">Cancel</Link>
+          </button>
+        </div>
+      </div>
+      <div class="background-effect effect-1"></div>
+      <div class="background-effect effect-2"></div>
+    </div>
+  );
+};
+
+export default SignUpPage;

@@ -1,0 +1,111 @@
+.loginpage-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 100vh;
+
+  .login-box {
+    width: 20%;
+    margin: 0 auto;
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 30px;
+    padding: 20px 25px 40px;
+
+    .login-heading {
+      color: #574e4ee5;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .login-inputwrapper {
+      margin: 15px auto;
+    }
+
+    label {
+      margin-left: 10px;
+      font-size: 24px;
+      line-height: 36px;
+      display: block;
+      color: #727272;
+      font-weight: 600;
+    }
+    input {
+      display: block;
+      font-size: 24px;
+      border: 2px #d9d9d9 solid;
+      border-radius: 40px;
+      opacity: 70%;
+      padding: 10px 20px;
+    }
+  }
+
+  .loginpage-login-btn {
+    font-size: 27px;
+    font-weight: 700;
+    background-color: #7366ff;
+    border-radius: 40px;
+    color: white;
+    text-align: center;
+    margin: 20px auto;
+    padding: 10px 40px;
+    border: none;
+  }
+
+  .disabled-btn {
+    background-color: #bbbbbb;
+  }
+
+  .loginpage-cancel-btn {
+    font-size: 27px;
+    font-weight: 700;
+    border-radius: 40px;
+    border: 1px #bbbbbb solid;
+    text-align: center;
+    background-color: white;
+    margin: 10px auto 20px auto;
+    padding: 10px 40px;
+
+    a {
+      text-decoration: none;
+      color: #bbbbbb;
+    }
+  }
+
+  .loginpage-signup-link {
+    color: #838383;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .background-effect {
+    position: absolute;
+    z-index: -1;
+    background: linear-gradient(
+      143.57deg,
+      rgba(233, 219, 219, 0.8) 32.96%,
+      rgba(205, 222, 255, 0.8) 87.79%
+    );
+    filter: blur(175px);
+    transform: matrix(1, 0, 0, -1, 0, 0);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .effect-1 {
+    width: 1100px;
+    height: 900px;
+    top: 0%;
+    right: 0%;
+  }
+
+  .effect-2 {
+    width: 1100px;
+    height: 900px;
+    top: 0%;
+    left: 0%;
+  }
+}

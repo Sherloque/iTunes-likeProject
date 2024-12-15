@@ -1,44 +1,81 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import {logUs} from '../store/action.js'
-import './LoginPage.css'
+import React, { useState, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logUs } from "../store/action.js";
+import "./LoginPage.scss";
 
+const LoginPage = () => {
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [valid, setValid] = useState(false);
 
+  const dispatch = useDispatch();
 
+  const validate = useCallback((loginValue, passwordValue) => {
+    return loginValue.length > 0 && passwordValue.length > 0;
+  }, []);
 
-class LoginPage extends React.Component {
-  constructor(props) {
-    super(props)
+  const handleLoginChange = (e) => {
+    const loginValue = e.target.value;
+    setLogin(loginValue);
+    setValid(validate(loginValue, password));
+  };
 
-    this.state = {
-      login: "",
-      password: "",
-      valid:false,
+  const handlePasswordChange = (e) => {
+    const passwordValue = e.target.value;
+    setPassword(passwordValue);
+    setValid(validate(login, passwordValue));
+  };
 
-    }
-    this.onChange1 = e => this.setState({ login: e.target.value, valid:this.loginValidation(e.target.value)? true: false })
-    this.onChange2 = e => this.setState({ password: e.target.value, valid:this.passValidation(e.target.value)? true: false  })
-    this.loginValidation =str => str.length>0 && this.state.password.length >0
-    this.passValidation = str => str.length>0 && this.state.login.length >0
-  }
-  render() {
-    return (
+  const handleLoginClick = () => {
+    dispatch(logUs(login, password));
+  };
+
+  return (
+    <div className="loginpage-container">
       <div className="login-box">
-        <h1>Авторизация</h1>
-        <input className="loginpage-login" type="text" value={this.state.login} onChange={this.onChange1} placeholder="login"></input>
-        <input className="loginpage-password" type="password" value={this.state.password} onChange={this.onChange2} placeholder="password"></input>
-        <button className="loginpage-login-btn" disabled ={!this.state.valid}
-          onClick={() => this.props.onSend(this.state.login, this.state.password)}
-        >Войти</button>
-        <button className="loginpage-signup-btn"><Link to="/signup" style={{color:"white", textDecoration: 'none' }}>Зарегистрироваться</Link></button>
-        <button className="loginpage-cancel-btn"><Link to="/" style={{color:"white", textDecoration: 'none' }}>Отмена</Link></button>
+        <h1 className="login-heading">Welcome Back!</h1>
+        <div className="login-inputwrapper">
+          <label for="login">Username</label>
+          <input
+            className="loginpage-login"
+            id="login"
+            type="text"
+            value={login}
+            onChange={handleLoginChange}
+            placeholder="Enter your username"
+          />
+        </div>
+        <div className="login-inputwrapper">
+          <label for="password">Password</label>
+          <input
+            className="loginpage-password"
+            id="password"
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            placeholder="Enter your password"
+          />
+        </div>
+
+        <button
+          className={`loginpage-login-btn ${!valid ? "disabled-btn" : ""}`}
+          disabled={!valid}
+          onClick={handleLoginClick}
+        >
+          Sign In
+        </button>
+        <button className="loginpage-cancel-btn">
+          <Link to="/feed">Cancel</Link>
+        </button>
+        <Link className="loginpage-signup-link" to="/signup">
+          I don't have an account
+        </Link>
       </div>
-    );
-  }
+      <div class="background-effect effect-1"></div>
+      <div class="background-effect effect-2"></div>
+    </div>
+  );
+};
 
-}
-
-let ConnectedLoginPage = connect(null, { onSend: logUs })(LoginPage)
-
-export default ConnectedLoginPage;
+export default LoginPage;

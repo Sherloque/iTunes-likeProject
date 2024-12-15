@@ -54,7 +54,7 @@ export const logUs = (login, password) => {
                 } else {
                     localStorage.setItem("token", data.token)
                     dispatch(loginUser(data.userInfo))
-                    history.push("/")
+                    history.push("/feed")
                 }
             })
     }

@@ -15,7 +15,7 @@ const MainPage = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch({ type: "LOGOUT_USER" });
-    navigate("/");
+    navigate("/login");
   };
 
   const token = localStorage.getItem("token");
