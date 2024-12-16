@@ -1,0 +1,81 @@
+.upload-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+  text-align: left;
+  overflow: hidden;
+  width: 100%;
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    padding-top: 16px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  &-files {
+    margin-left: 32px;
+    align-items: flex-start;
+    justify-items: flex-start;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &-actions {
+    display: flex;
+    flex: 1;
+    vertical-align: middle;
+    flex-direction: column;
+    margin: 32px auto 0;
+
+    .upload-btn {
+      text-decoration: none;
+      font-size: 27px;
+      font-weight: 700;
+      background-color: rgba(139, 137, 255, 1);
+      border-radius: 40px;
+      color: white;
+      text-align: center;
+      padding: 5px 25px;
+      border: none;
+      margin-bottom: 20px;
+    }
+  }
+
+  &-file {
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #555;
+  }
+
+  .upload-file-row {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 50px;
+    padding: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+}
+
+.ProgressWrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+}
+
+.upload-btn:disabled {
+  background: rgb(189, 189, 189);
+}

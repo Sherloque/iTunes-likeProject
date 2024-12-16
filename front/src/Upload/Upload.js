@@ -1,156 +1,142 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import Dropzone from '../Upload/Dropzone'
-import { jwtDecode } from 'jwt-decode';
-import Progress from '../Upload/Progress'
-import './Upload.css'
+import React, { useState, useCallback } from "react";
+import Dropzone from "../Upload/Dropzone";
+import Progress from "../Upload/Progress";
+import { jwtDecode } from "jwt-decode";
+import "./Upload.scss";
 
+const Upload = () => {
+  const [files, setFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState({});
+  const [successfulUploaded, setSuccessfulUploaded] = useState(false);
 
+  const onFilesAdded = useCallback((newFiles) => {
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+  }, []);
 
-class Upload extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      files: [],
-      uploading: false,
-      uploadProgress: {},
-      successfullUploaded: false
-    };
-
-    this.onFilesAdded = this.onFilesAdded.bind(this);
-    this.uploadFiles = this.uploadFiles.bind(this);
-    this.renderActions = this.renderActions.bind(this);
-    this.sendRequest = this.sendRequest.bind(this);
-  }
-
-
-
-  onFilesAdded(files) {
-    this.setState(prevState => ({
-      files: prevState.files.concat(files)
-    }));
-  }
-
-  renderProgress(file) {
-    const uploadProgress = this.state.uploadProgress[file.name];
-    if (this.state.uploading || this.state.successfullUploaded) {
+  const renderProgress = (file) => {
+    const progress = uploadProgress[file.name];
+    if (uploading || successfulUploaded) {
       return (
         <div className="ProgressWrapper">
-          <Progress progress={uploadProgress ? uploadProgress.percentage : 0} />
+          <Progress progress={progress ? progress.percentage : 0} />
         </div>
       );
     }
-  }
+  };
 
-  renderActions() {
-    if (this.state.successfullUploaded) {
+  const renderActions = () => {
+    if (successfulUploaded) {
       return (
-        <button className="upload-btn"
-          onClick={() =>
-            this.setState({ files: [], successfullUploaded: false })
-          }
+        <button
+          className="upload-btn"
+          onClick={() => {
+            setFiles([]);
+            setSuccessfulUploaded(false);
+          }}
         >
-          Очистить
+          Delete files
         </button>
       );
     } else {
       return (
-        <button className="upload-btn"
-          disabled={this.state.files.length < 0 || this.state.uploading}
-          onClick={this.uploadFiles}
+        <button
+          className="upload-btn"
+          disabled={uploading}
+          onClick={() => {
+            if (files.length === 0) {
+              document.querySelector(".dropzone-fileinput").click();
+            } else {
+              uploadFiles();
+            }
+          }}
         >
-          Загрузить
+          {files.length === 0 ? "Choose files" : "Upload files"}
         </button>
       );
     }
-  }
+  };
 
-  async uploadFiles() {
-    this.setState({ uploadProgress: {}, uploading: true });
-    const promises = [];
-    this.state.files.forEach(file => {
-      promises.push(this.sendRequest(file));
-    });
+  const uploadFiles = useCallback(async () => {
+    setUploadProgress({});
+    setUploading(true);
+
+    const promises = files.map((file) => sendRequest(file));
     try {
       await Promise.all(promises);
-
-      this.setState({ successfullUploaded: true, uploading: false });
-    } catch (e) {
-      console.log(e)
-      this.setState({ successfullUploaded: true, uploading: false });
+      setSuccessfulUploaded(true);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setUploading(false);
     }
-  }
+  }, [files]);
 
-  sendRequest(file) {
+  const sendRequest = useCallback((file) => {
     return new Promise((resolve, reject) => {
       const req = new XMLHttpRequest();
 
-      req.upload.addEventListener("progress", event => {
+      req.upload.addEventListener("progress", (event) => {
         if (event.lengthComputable) {
-          const copy = { ...this.state.uploadProgress };
-          copy[file.name] = {
-            state: "pending",
-            percentage: (event.loaded / event.total) * 100
-          };
-          this.setState({ uploadProgress: copy });
+          setUploadProgress((prevProgress) => ({
+            ...prevProgress,
+            [file.name]: {
+              state: "pending",
+              percentage: (event.loaded / event.total) * 100,
+            },
+          }));
         }
       });
 
-      req.upload.addEventListener("load", event => {
-        const copy = { ...this.state.uploadProgress };
-        copy[file.name] = { state: "done", percentage: 100 };
-        this.setState({ uploadProgress: copy });
+      req.upload.addEventListener("load", () => {
+        setUploadProgress((prevProgress) => ({
+          ...prevProgress,
+          [file.name]: { state: "done", percentage: 100 },
+        }));
         resolve(req.response);
       });
 
-      req.upload.addEventListener("error", event => {
-        const copy = { ...this.state.uploadProgress };
-        copy[file.name] = { state: "error", percentage: 0 };
-        this.setState({ uploadProgress: copy });
+      req.upload.addEventListener("error", () => {
+        setUploadProgress((prevProgress) => ({
+          ...prevProgress,
+          [file.name]: { state: "error", percentage: 0 },
+        }));
         reject(req.response);
       });
 
       const formData = new FormData();
       formData.append("file", file, file.name);
       formData.append("field", jwtDecode(localStorage.token).sub._id);
+
       req.open("POST", "/upload");
-      req.setRequestHeader('Authorization', 'Bearer ' + localStorage.token)
+      req.setRequestHeader("Authorization", `Bearer ${localStorage.token}`);
       req.send(formData);
-      req.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 400) {
-          alert('Этот файл уже был загружен')
+
+      req.onreadystatechange = () => {
+        if (req.readyState === 4 && req.status === 400) {
+          alert("This file has already been uploaded");
         }
       };
     });
-  }
+  }, []);
 
-  render() {
-    return (
-      <div className="Upload">
-        <div className="Content">
-          <div>
-            <Dropzone
-              onFilesAdded={this.onFilesAdded}
-              disabled={this.state.uploading || this.state.successfullUploaded}
-            />
+  return (
+    <div className="upload">
+      <Dropzone
+        onFilesAdded={onFilesAdded}
+        disabled={uploading || successfulUploaded}
+      />
+      <div className="upload-files">
+        {files.map((file) => (
+          <div key={file.name} className="upload-file-row">
+            <span className="upload-file">{file.name}</span>
+            {renderProgress(file)}
           </div>
-          <div className="Files">
-            {this.state.files.map(file => {
-              return (
-                <div key={file.name} className="Row">
-                  <span className="Filename">{file.name}</span>
-                  {this.renderProgress(file)}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="Actions">{this.renderActions()}</div>
+        ))}
       </div>
-    );
-  }
-}
+      <div className="upload-actions">{renderActions()}</div>
+    </div>
+  );
+};
 
-
-let ConnectedUpload = connect(null, null)(Upload);
-export default ConnectedUpload;
+export default Upload;

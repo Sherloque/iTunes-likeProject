@@ -1,87 +1,80 @@
-import React, { Component } from 'react'
-import './Dropzone.css'
+import React, { useState, useRef, useCallback } from "react";
+import "./Dropzone.scss";
+import { NoteIcon } from "assets";
 
-class Dropzone extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { hightlight: false }
-    this.fileInputRef = React.createRef()
-    this.openFileDialog = this.openFileDialog.bind(this)
-    this.onFilesAdded = this.onFilesAdded.bind(this)
-    this.onDragOver = this.onDragOver.bind(this)
-    this.onDragLeave = this.onDragLeave.bind(this)
-    this.onDrop = this.onDrop.bind(this)
-  }
+const Dropzone = ({ disabled, onFilesAdded }) => {
+  const [highlight, setHighlight] = useState(false);
+  const fileInputRef = useRef(null);
 
-  openFileDialog() {
-    if (this.props.disabled) return
-    this.fileInputRef.current.click()
-  }
-
-  onFilesAdded(evt) {
-    if (this.props.disabled) return
-    const files = evt.target.files
-    if (this.props.onFilesAdded) {
-      const array = this.fileListToArray(files)
-      this.props.onFilesAdded(array)
+  const openFileDialog = useCallback(() => {
+    if (!disabled && fileInputRef.current) {
+      fileInputRef.current.click();
     }
-  }
+  }, [disabled]);
 
-  onDragOver(evt) {
-    evt.preventDefault()
+  const onFilesAddedHandler = useCallback(
+    (event) => {
+      if (disabled) return;
+      const files = event.target.files;
+      if (onFilesAdded) {
+        const array = fileListToArray(files);
+        onFilesAdded(array);
+      }
+    },
+    [disabled, onFilesAdded]
+  );
 
-    if (this.props.disabled) return
+  const onDragOver = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (!disabled) setHighlight(true);
+    },
+    [disabled]
+  );
 
-    this.setState({ hightlight: true })
-  }
+  const onDragLeave = useCallback(() => {
+    setHighlight(false);
+  }, []);
 
-  onDragLeave() {
-    this.setState({ hightlight: false })
-  }
+  const onDrop = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (disabled) return;
+      const files = event.dataTransfer.files;
+      if (onFilesAdded) {
+        const array = fileListToArray(files);
+        onFilesAdded(array);
+      }
+      setHighlight(false);
+    },
+    [disabled, onFilesAdded]
+  );
 
-  onDrop(event) {
-    event.preventDefault()
+  const fileListToArray = (list) => {
+    return Array.from(list);
+  };
 
-    if (this.props.disabled) return
+  return (
+    <div
+      className={`dropzone ${highlight ? "highlight" : ""}`}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+      onClick={openFileDialog}
+      style={{ cursor: disabled ? "default" : "pointer" }}
+    >
+      <input
+        ref={fileInputRef}
+        className="dropzone-fileinput"
+        type="file"
+        accept=".mp3,.WAV,.Ogg,.flac"
+        multiple
+        onChange={onFilesAddedHandler}
+      />
+      <NoteIcon className="note-icon" />
+      <span className="dropzone-text">Drop your songs here</span>
+    </div>
+  );
+};
 
-    const files = event.dataTransfer.files
-    if (this.props.onFilesAdded) {
-      const array = this.fileListToArray(files)
-      this.props.onFilesAdded(array)
-    }
-    this.setState({ hightlight: false })
-  }
-
-  fileListToArray(list) {
-    const array = []
-    for (var i = 0; i < list.length; i++) {
-      array.push(list.item(i))
-    }
-    return array
-  }
-
-  render() {
-    return (
-      <div
-        className={`Dropzone ${this.state.hightlight ? 'Highlight' : ''}`}
-        onDragOver={this.onDragOver}
-        onDragLeave={this.onDragLeave}
-        onDrop={this.onDrop}
-        onClick={this.openFileDialog}
-        style={{ cursor: this.props.disabled ? 'default' : 'pointer' }}
-      >
-        <input
-          ref={this.fileInputRef}
-          className="FileInput"
-          type="file"
-          accept=".mp3,.WAV,.Ogg,.flac"
-          multiple
-          onChange={this.onFilesAdded}
-        />
-        <span>Загрузить песню</span>
-      </div>
-    )
-  }
-}
-
-export default Dropzone
+export default Dropzone;

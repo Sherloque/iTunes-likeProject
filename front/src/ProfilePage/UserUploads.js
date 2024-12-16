@@ -1,39 +1,50 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { jwtDecode } from 'jwt-decode';
-import {fetchPersonalUploads} from '../store/action.js'
-import Player from '../MainPage/Player'
-import './Favourites.css'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import { fetchPersonalUploads } from "../store/action";
+import Player from "../MainPage/Player";
+import "./Favourites.css";
 
-const mapStateToProps = store => {
-   return  (console.log(store),{
-    userUploads: store.userUploads.userUploads,
-})
-}
-;
+const UserUploads = () => {
+  const dispatch = useDispatch();
+  const userUploads = useSelector((state) => state.userUploads.userUploads);
 
+  useEffect(() => {
+    const userId = jwtDecode(localStorage.token).sub._id;
+    dispatch(fetchPersonalUploads(userId));
+  }, [dispatch]);
 
-const mapDispatchToProps = {
-    fetchPersonalUploads
-  };
-  
-class UserUploads extends React.Component {
-    componentDidMount() {
-        this.props.fetchPersonalUploads(jwtDecode(localStorage.token).sub._id);
-      }
+  return (
+    <>
+      <div>
+        {userUploads === null ? (
+          <p className="load-placeholder">Fetching personal uploads</p>
+        ) : userUploads.length > 0 ? (
+          userUploads.map((item, i) => (
+            <div className="song" key={i}>
+              <p className="chart-position">{item.position}</p>
+              <img className="song-cover" src={item.album.cover} />
+              <div className="song-description">
+                <p className="song-title">{item.title}</p>
+                <p className="song-artist">{item.artist.name}</p>
+              </div>
+              <p className="song-duration">
+                {Math.floor(item.duration / 60) +
+                  ":" +
+                  ("0" + Math.floor(item.duration % 60)).slice(-2)}
+              </p>
 
-    render() {
-       let uSongs = this.props
-        return (
-           <>
-            {(uSongs.userUploads.length>0 )? (uSongs.userUploads.map((item,i) => (<div className = "song-block" key={i}><p className = "favourites-title">{item.artist+ " - " + item.songname}</p><Player track={item}></Player></div>)))
-            : (<p className="load-placeholder">Waiting for songs...</p>)}
-            </>
-        );
-    }
+              <Player track={item}></Player>
+            </div>
+          ))
+        ) : (
+          <p className="empty-placeholder">
+            Empty! Start uploading your songs now
+          </p>
+        )}
+      </div>
+    </>
+  );
+};
 
-}
-
-let ConnectedUserUploads = connect(mapStateToProps, mapDispatchToProps)(UserUploads);
-
-export default ConnectedUserUploads;
+export default UserUploads;
