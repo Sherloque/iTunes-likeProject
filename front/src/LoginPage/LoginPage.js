@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { logUs } from "../store/action.js";
+import { logUser } from "../store/action.js";
 import "./LoginPage.scss";
 
 const LoginPage = () => {
@@ -10,6 +10,8 @@ const LoginPage = () => {
   const [valid, setValid] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 
   const validate = useCallback((loginValue, passwordValue) => {
     return loginValue.length > 0 && passwordValue.length > 0;
@@ -28,7 +30,7 @@ const LoginPage = () => {
   };
 
   const handleLoginClick = () => {
-    dispatch(logUs(login, password));
+    dispatch(logUser(login, password, navigate));
   };
 
   return (

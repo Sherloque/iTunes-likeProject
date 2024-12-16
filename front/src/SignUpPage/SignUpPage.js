@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signUser } from "../store/action.js";
 import "./SignUpPage.scss";
@@ -16,6 +16,7 @@ const SignUpPage = () => {
   const [valid, setValid] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +47,8 @@ const SignUpPage = () => {
         formData.login,
         formData.password,
         formData.firstname,
-        formData.lastname
+        formData.lastname,
+        navigate
       )
     );
   };

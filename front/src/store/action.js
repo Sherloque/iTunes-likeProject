@@ -1,7 +1,3 @@
-import store from '../store/store'
-import history from '../history/history';
-
-
 export const getHotChart = chart => ({
     type: 'GET_HOT_CHART',
     payload: chart
@@ -37,7 +33,7 @@ export const getRecentUploads = fresh => ({
     payload: fresh
 })
 
-export const logUs = (login, password) => {
+export const logUser = (login, password, navigate) => {
     return dispatch => {
         return fetch("/login", {
             method: "POST",
@@ -54,14 +50,14 @@ export const logUs = (login, password) => {
                 } else {
                     localStorage.setItem("token", data.token)
                     dispatch(loginUser(data.userInfo))
-                    history.push("/feed")
+                    navigate('/feed');
                 }
             })
     }
 }
 
 
-export const signUser = (login, password, firstname, lastname) => {
+export const signUser = (login, password, firstname, lastname, navigate) => {
     return dispatch => {
         return fetch("/signup", {
             method: "POST",
@@ -80,7 +76,7 @@ export const signUser = (login, password, firstname, lastname) => {
                     dispatch({ type: 'REGISTERED' })
                     localStorage.setItem("token", data.token)
                     dispatch(loginUser(data.userInfo))
-                    history.push('/')
+                    navigate('/feed');
                 }
             })
     }
