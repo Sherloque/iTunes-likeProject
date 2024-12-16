@@ -96,6 +96,7 @@ function jwtWare() {
       '/login',
       '/',
       '/signup',
+      '/hotchart'
     ]
   });
 }

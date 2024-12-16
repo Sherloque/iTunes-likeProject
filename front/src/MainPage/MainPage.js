@@ -49,61 +49,48 @@ const MainPage = () => {
       </header>
 
       <main className="mainpage-main">
-        {token ? (
-          <>
-            <section className="welcome-section">
+        <>
+          <section className="welcome-section">
+            {token && (
               <div className="welcome-section-greeting">
                 <h1>Hey, {userLogin}!</h1>
               </div>
-              <div className="banner">
-                <div className="banner-info">
-                  <h2 className="banner-info-platformname">PLATFORMNAME</h2>
-                  <div className="banner-info-blur-wrapper">
-                    <h2 className="banner-info-subtitle">
-                      Discover, Share, Upload!
-                    </h2>
-                  </div>
-                  <p className="banner-info-description">
-                    Upload Your Beat, Feel the Music Heat.
-                  </p>
+            )}
+            <div className="banner">
+              <div className="banner-info">
+                <h2 className="banner-info-platformname">PLATFORMNAME</h2>
+                <div className="banner-info-blur-wrapper">
+                  <h2 className="banner-info-subtitle">
+                    Discover, Share, Upload!
+                  </h2>
                 </div>
-                <img
-                  src={require("../assets/banner.png")}
-                  alt="Music Banner"
-                  className="banner-image"
-                />
+                <p className="banner-info-description">
+                  Upload Your Beat, Feel the Music Heat.
+                </p>
               </div>
-            </section>
-
-            <section className="chart-section">
-              <input
-                type="text"
-                className="chart-section-search"
-                placeholder="Search..."
+              <img
+                src={require("../assets/banner.png")}
+                alt="Music Banner"
+                className="banner-image"
               />
-              <h2>Deezer Hot 10 Chart</h2>
-              <Chart />
-            </section>
-
-            <section className="uploads-section">
-              <h2>Recent Uploads</h2>
-              <RecentUploads />
-            </section>
-          </>
-        ) : (
-          <section className="auth-section">
-            <button className="mainpage-login-btn">
-              <Link to="/login" className="mainpage-link">
-                Войти
-              </Link>
-            </button>
-            <button className="mainpage-signup-btn">
-              <Link to="/signup" className="mainpage-link">
-                Зарегистрироваться
-              </Link>
-            </button>
+            </div>
           </section>
-        )}
+
+          <section className="chart-section">
+            <input
+              type="text"
+              className="chart-section-search"
+              placeholder="Search..."
+            />
+            <h2>Deezer Hot 10 Chart</h2>
+            <Chart />
+          </section>
+
+          <section className="uploads-section">
+            <h2>Recent Uploads</h2>
+            <RecentUploads />
+          </section>
+        </>
       </main>
 
       <footer className="mainpage-footer">
