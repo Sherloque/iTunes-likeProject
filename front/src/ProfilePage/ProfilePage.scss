@@ -68,11 +68,7 @@
   .background-effect {
     position: absolute;
     z-index: -1;
-    background: linear-gradient(
-      143.57deg,
-      rgba(233, 219, 219, 0.8) 32.96%,
-      rgba(205, 222, 255, 0.8) 87.79%
-    );
+
     filter: blur(175px);
     transform: matrix(1, 0, 0, -1, 0, 0);
     border-radius: 50%;
@@ -82,14 +78,24 @@
   .effect-1 {
     width: 1100px;
     height: 900px;
+    background: linear-gradient(
+      143.57deg,
+      rgba(135, 139, 253, 0.5) 32.96%,
+      rgba(205, 222, 255, 0.8) 87.79%
+    );
     top: 0%;
     right: 0%;
   }
 
   .effect-2 {
     width: 1100px;
-    height: 900px;
+    height: 925px;
+    background: linear-gradient(
+      143.57deg,
+      rgba(233, 219, 219, 0.8) 32.96%,
+      rgba(135, 139, 253, 0.6) 87.79%
+    );
     top: 0%;
-    left: 0%;
+    left: -20%;
   }
 }
