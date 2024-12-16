@@ -55,9 +55,7 @@ const ProfilePage = () => {
           <EditProfileIcon className="nav-icon" />
         </button>
         <button className="profile-box-tomain">
-          <Link to="/feed">
-            Return
-          </Link>
+          <Link to="/feed">Return</Link>
         </button>
 
         <div className="upload-block">
@@ -70,9 +68,89 @@ const ProfilePage = () => {
         <h1>Your songs</h1>
         <UserUploads />
       </div>
-      
+
       <div class="background-effect effect-1"></div>
       <div class="background-effect effect-2"></div>
+
+      {isModalOpen && (
+        <div
+          className="modal-overlay"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsModalOpen(false);
+            }
+          }}
+        >
+          <div className="modal-content">
+            <h2 className="modal-heading">Edit your profile</h2>
+            <div className="profile-inputwrapper">
+              <label for="username">Username</label>
+              <input
+                className="profile-input"
+                placeholder="Username"
+                name="username"
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
+              />
+            </div>
+            <div className="profile-inputwrapper">
+              <label for="firstname">Firstname</label>
+              <input
+                className="profile-input"
+                placeholder="Firstname"
+                value={firstname}
+                name="firstname"
+                onChange={(e) => setFirstname(e.target.value)}
+              />
+            </div>
+            <div className="profile-inputwrapper">
+              <label for="lastname">Lastname</label>
+              <input
+                className="profile-input"
+                placeholder="Lastname"
+                name="lastname"
+                value={lastname}
+                onChange={(e) => setLastname(e.target.value)}
+              />
+            </div>
+            <div className="profile-inputwrapper">
+              <label for="password">Password</label>
+              <input
+                className="profile-input"
+                type="password"
+                name="password"
+                placeholder="Enter your new password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="profile-inputwrapper">
+              <label for="verpass">Repeat password</label>
+              <input
+                className="profile-input"
+                type="password"
+                name="verpass"
+                placeholder="Repeat your new password"
+                value={verpass}
+                onChange={(e) => setVerpass(e.target.value)}
+              />
+            </div>
+            <button
+              className="modal-submit-btn"
+              disabled={!(valid && validPass)}
+              onClick={handleSubmit}
+            >
+              Save
+            </button>
+            <button
+              className="modal-close-btn"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
