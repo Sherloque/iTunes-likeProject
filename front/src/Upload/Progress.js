@@ -1,21 +1,10 @@
-import React, { Component } from 'react'
-import './Progress.scss'
+import React from "react";
+import "./Progress.scss";
 
-class Progress extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-  render() {
-    return (
-      <div className="ProgressBar">
-        <div
-          className="Progress"
-          style={{ width: this.props.progress + '%' }}
-        />
-      </div>
-    )
-  }
-}
+const Progress = ({ progress }) => (
+  <div className="ProgressBar">
+    <div className="Progress" style={{ width: `${progress}%` }} />
+  </div>
+);
 
-export default Progress
+export default Progress;

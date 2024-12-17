@@ -1,37 +1,30 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { fetchRecentUploads } from '../store/action.js'
-import Player from './Player'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchRecentUploads } from "../store/action.js";
 
-const mapStateToProps = store => {
-    return ({
-        recentUploads: store.fresh.recentUploads
-    })
+const RecentUploads = () => {
+  const dispatch = useDispatch();
+  const recentUploads = useSelector((store) => store.fresh.recentUploads);
+
+  useEffect(() => {
+    dispatch(fetchRecentUploads());
+  }, [dispatch]);
+
+  if (!Array.isArray(recentUploads)) {
+    return <p className="load-placeholder">LOADING...</p>;
+  }
+
+  return (
+    <>
+      {recentUploads.slice().reverse().map((item, i) => (
+        <div className="song-block" key={i}>
+          <p className="chart-title">
+            {`${item.artist} - ${item.songname}`}
+          </p>
+        </div>
+      ))}
+    </>
+  );
 };
 
-
-const mapDispatchToProps = {
-    fetchRecentUploads
-};
-
-class RecentUploads extends React.Component {
-    componentDidMount() {
-        this.props.fetchRecentUploads();
-    }
-
-    render() {
-        const { recentUploads } = this.props
-        return (
-            <>
-                {(Array.isArray(recentUploads)) ? (recentUploads.reverse().map((item, i) => (<div className="song-block" key={i}><p className="chart-title">{item.artist + " - " + item.songname}</p><Player track={item}></Player></div>)))
-                    : (<p className="load-placeholder">LOADING...</p>)
-                }
-            </>
-        );
-    }
-
-}
-
-let ConnectedRecentUploads = connect(mapStateToProps, mapDispatchToProps)(RecentUploads);
-
-export default ConnectedRecentUploads;
+export default RecentUploads;

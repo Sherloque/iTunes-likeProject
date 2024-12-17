@@ -1,139 +1,121 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { jwtDecode } from "jwt-decode";
-import { toFavourites } from "../store/action.js";
-import "./Player.css";
-import { ReactComponent as PlaySVG } from "./logos/play.svg";
-import { ReactComponent as PauseSVG } from "./logos/pause.svg";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  playSong,
+  pauseSong,
+  stopSong,
+  updateTime,
+  setDuration,
+} from "../store/action";
+import "./Player.scss";
 import { ReactComponent as StopSVG } from "./logos/stop.svg";
-import { ReactComponent as FavouritesSVG } from "./logos/bookmark.svg";
+import { ExpandIcon, MinimizedIcon, PauseIcon, PlayIcon } from "assets";
 
 function getTime(time) {
-  if (!isNaN(time)) {
-    return (
-      Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2)
-    );
-  }
-  return "0:00";
+  return !isNaN(time)
+    ? Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2)
+    : "0:00";
 }
 
 const Player = ({ track }) => {
-  const [playerState, setPlayerState] = useState("stopped");
-  const [currentSong, setCurrentSong] = useState(null);
-  const [trackDuration, setTrackDuration] = useState(null);
-  const [currentTime, setCurrentTime] = useState(null);
   const playerRef = useRef(null);
   const dispatch = useDispatch();
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
-    const player = playerRef.current;
-    const handleTimeUpdate = () => {
-      setCurrentTime(player.currentTime);
-      setTrackDuration(player.duration);
-
-      if (player.currentTime === player.duration) {
-        setPlayerState("stopped");
-      }
-    };
-
-    player.addEventListener("timeupdate", handleTimeUpdate);
-    return () => player.removeEventListener("timeupdate", handleTimeUpdate);
-  }, []);
+  const { playerState, currentSong, trackInfo, currentTime, trackDuration } =
+    useSelector((state) => state.player);
 
   useEffect(() => {
     const player = playerRef.current;
 
-    if (currentSong) {
-      player.src = currentSong;
+    if (playerState === "playing") {
       player.play();
-      setPlayerState("playing");
-    }
-  }, [currentSong]);
-
-  useEffect(() => {
-    const player = playerRef.current;
-
-    if (playerState === "paused") {
+    } else if (playerState === "paused") {
       player.pause();
     } else if (playerState === "stopped") {
       player.pause();
       player.currentTime = 0;
-      setCurrentSong(null);
-    } else if (playerState === "playing") {
-      player.play();
     }
   }, [playerState]);
 
-  const handleAddToFavourites = () => {
-    const userId = jwtDecode(localStorage.token).sub._id;
-    dispatch(
-      toFavourites(
-        userId,
-        track.id,
-        track.artist.name,
-        track.title,
-        track.preview
-      )
-    );
+  useEffect(() => {
+    const player = playerRef.current;
+
+    const handleTimeUpdate = () => {
+      dispatch(updateTime(player.currentTime));
+      dispatch(setDuration(player.duration));
+    };
+
+    player.addEventListener("timeupdate", handleTimeUpdate);
+    return () => player.removeEventListener("timeupdate", handleTimeUpdate);
+  }, [dispatch]);
+
+  const handlePlay = () => {
+    dispatch(playSong(track.preview, track));
   };
 
-  const currentTimeFormatted = getTime(currentTime);
-  const trackDurationFormatted = getTime(trackDuration);
+  const progressPercentage = (currentTime / trackDuration) * 100 || 0;
 
   return (
-    <>
-      {playerState === "stopped" && (
-        <button
-          className="player-btn"
-          onClick={() => {
-            setCurrentSong(track.preview);
-            setPlayerState("playing");
-          }}
-        >
-          <PlaySVG className="svg" />
-        </button>
-      )}
-
-      {playerState === "paused" && (
-        <button
-          className="player-btn"
-          onClick={() => setPlayerState("playing")}
-        >
-          <PlaySVG className="svg" />
-        </button>
-      )}
-
-      {playerState === "playing" && (
-        <button className="player-btn" onClick={() => setPlayerState("paused")}>
-          <PauseSVG className="svg" />
-        </button>
-      )}
-
-      {(playerState === "playing" || playerState === "paused") && (
-        <button
-          className="player-btn"
-          onClick={() => setPlayerState("stopped")}
-        >
-          <StopSVG className="svg" />
-        </button>
-      )}
-
-      {(playerState === "playing" || playerState === "paused") && (
-        <div className="player-timer">
-          {currentTimeFormatted} / {trackDurationFormatted}
-        </div>
-      )}
-
-      <audio ref={playerRef} />
-
+    <div className={`global-player ${isExpanded ? "expanded" : "minimized"}`}>
       <button
-        className="player-btn"
-        hidden={window.location.pathname === "/profile"}
-        onClick={handleAddToFavourites}
+        className="size-toggle"
+        onClick={() => setIsExpanded(!isExpanded)}
       >
-        <FavouritesSVG className="svg" />
+        {isExpanded ? <MinimizedIcon /> : <ExpandIcon />}
       </button>
-    </>
+
+      {isExpanded && (
+        <>
+          <div className="track-info">
+            <div className="track-info-title">
+              {trackInfo?.title || "Song Title"}
+            </div>
+            <div className="track-info-artist">
+              {trackInfo?.artist?.name || "Artist"}
+            </div>
+          </div>
+        </>
+      )}
+
+      <div className="player-progress">
+        <span>{getTime(currentTime)}</span>
+        <input
+          type="range"
+          min="0"
+          max={trackDuration || 0}
+          value={currentTime}
+          onChange={(e) => (playerRef.current.currentTime = e.target.value)}
+          style={{
+            "--progress": `${progressPercentage}%`,
+          }}
+        />
+        <span>{getTime(trackDuration)}</span>
+      </div>
+      {isExpanded && (
+        <img
+          className="song-cover"
+          src={trackInfo?.album?.cover || require("../assets/blank.png")}
+        />
+      )}
+
+      <div className="player-controls">
+        {playerState === "playing" ? (
+          <button onClick={() => dispatch(pauseSong())}>
+            <PauseIcon />
+          </button>
+        ) : (
+          <button onClick={handlePlay}>
+            <PlayIcon />
+          </button>
+        )}
+        <button onClick={() => dispatch(stopSong())}>
+          <StopSVG />
+        </button>
+      </div>
+
+      <audio ref={playerRef} src={currentSong} />
+    </div>
   );
 };
 

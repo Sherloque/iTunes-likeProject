@@ -6,11 +6,12 @@ import Chart from "./Chart";
 import RecentUploads from "./RecentUploads";
 import "./MainPage.scss";
 import { LoginIcon, ProfileIcon, SignUpIcon, LogoutIcon } from "assets";
+import Player from "./Player";
 
 const MainPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.currentUser);
+  const track = useSelector((state) => state.player.trackInfo);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -91,8 +92,8 @@ const MainPage = () => {
             <RecentUploads />
           </section>
         </>
+        {track && <Player track={track}></Player>}
       </main>
-
       <footer className="mainpage-footer">
         <p>&copy; 2024 PLATFORMNAME. All rights reserved.</p>
       </footer>

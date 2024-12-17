@@ -1,3 +1,12 @@
+import {
+    PLAY_SONG,
+    PAUSE_SONG,
+    STOP_SONG,
+    UPDATE_TIME,
+    SET_DURATION,
+  } from "./actionTypes";
+
+
 export const getHotChart = chart => ({
     type: 'GET_HOT_CHART',
     payload: chart
@@ -32,6 +41,29 @@ export const getRecentUploads = fresh => ({
     type: 'GET_RECENT',
     payload: fresh
 })
+  
+  export const playSong = (preview, track) => ({
+    type: PLAY_SONG,
+    payload: { preview, track },
+  });
+  
+  export const pauseSong = () => ({
+    type: PAUSE_SONG,
+  });
+  
+  export const stopSong = () => ({
+    type: STOP_SONG,
+  });
+  
+  export const updateTime = (currentTime) => ({
+    type: UPDATE_TIME,
+    payload: currentTime,
+  });
+  
+  export const setDuration = (duration) => ({
+    type: SET_DURATION,
+    payload: duration,
+  });
 
 export const logUser = (login, password, navigate) => {
     return dispatch => {
