@@ -6,12 +6,17 @@ import Chart from "./Chart";
 import RecentUploads from "./RecentUploads";
 import "./MainPage.scss";
 import { LoginIcon, ProfileIcon, SignUpIcon, LogoutIcon } from "assets";
+import { fetchSearch } from "../store/action";
+
 import Player from "./Player";
 
 const MainPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const track = useSelector((state) => state.player.trackInfo);
+  const searchResults = useSelector(
+    (store) => store.searchResults.searchResults
+  );
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -82,6 +87,11 @@ const MainPage = () => {
               type="text"
               className="chart-section-search"
               placeholder="Search..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  dispatch(fetchSearch(e.target.value));
+                }
+              }}
             />
             <h2>Deezer Hot 10 Chart</h2>
             <Chart />

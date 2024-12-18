@@ -8,7 +8,6 @@ const Chart = () => {
   const dispatch = useDispatch();
   const chartSongs = useSelector((state) => state.chart.chartSongs);
 
-
   useEffect(() => {
     dispatch(fetchHotChart());
   }, [dispatch]);

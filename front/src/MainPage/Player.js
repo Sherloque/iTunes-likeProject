@@ -27,7 +27,6 @@ const Player = ({ track }) => {
 
   useEffect(() => {
     const player = playerRef.current;
-
     if (playerState === "playing") {
       player.play();
     } else if (playerState === "paused") {
@@ -36,7 +35,7 @@ const Player = ({ track }) => {
       player.pause();
       player.currentTime = 0;
     }
-  }, [playerState]);
+  }, [playerState, currentSong]);
 
   useEffect(() => {
     const player = playerRef.current;
