@@ -74,8 +74,8 @@ const LoginPage = () => {
           I don't have an account
         </Link>
       </div>
-      <div class="background-effect effect-1"></div>
-      <div class="background-effect effect-2"></div>
+      <div className="background-effect effect-1"></div>
+      <div className="background-effect effect-2"></div>
     </div>
   );
 };

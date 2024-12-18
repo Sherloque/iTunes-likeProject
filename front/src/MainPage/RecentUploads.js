@@ -4,7 +4,7 @@ import { fetchRecentUploads, playSong } from "../store/action.js";
 
 const RecentUploads = () => {
   const dispatch = useDispatch();
-  const recentUploads = useSelector((store) => store.fresh.recentUploads);
+  const recentUploads = useSelector((store) => store.recent.recentUploads);
 
   useEffect(() => {
     dispatch(fetchRecentUploads());

@@ -2,17 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import { changeUserInfo } from "../store/action.js";
+import {
+  changeUserInfo,
+  fetchPersonalFavourites,
+  fetchPersonalUploads,
+} from "../store/action.js";
 import Favourites from "./Favourites";
 import UserUploads from "./UserUploads";
 import Upload from "../Upload/Upload";
 import "./ProfilePage.scss";
 import { EditProfileIcon } from "assets/index.js";
+import SongList from "SongList/SongList.js";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const user = token ? jwtDecode(token).sub : null;
+  console.log(user);
 
   const [login, setLogin] = useState(user?.login || "");
   const [password, setPassword] = useState("");
@@ -63,14 +69,26 @@ const ProfilePage = () => {
         </div>
 
         <h1>Favourites</h1>
-        <Favourites />
+        <SongList
+          fetchAction={fetchPersonalFavourites}
+          selector={(state) => state.favourites.favouriteSongs || []}
+          renderEmpty="Empty! Start adding songs to your favourites now."
+          renderLoading="Fetching personal favourites..."
+          fetchParams={user._id}
+        />
 
         <h1>Your songs</h1>
-        <UserUploads />
+        <SongList
+          fetchAction={fetchPersonalUploads}
+          selector={(state) => state.userUploads.userUploads || []}
+          renderEmpty="Empty! Start uploading your songs now."
+          renderLoading="Fetching personal uploads..."
+          fetchParams={user._id}
+        />
       </div>
 
-      <div class="background-effect effect-1"></div>
-      <div class="background-effect effect-2"></div>
+      <div className="background-effect effect-1"></div>
+      <div className="background-effect effect-2"></div>
 
       {isModalOpen && (
         <div

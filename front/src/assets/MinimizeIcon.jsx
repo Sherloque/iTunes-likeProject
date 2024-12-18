@@ -9,7 +9,7 @@ export const MinimizedIcon = () => (
     <path
       d="M10 24H38"
       stroke="#3F3434"
-      stroke-width="4"
+      strokeWidth="4"
       stroke-linecap="round"
       stroke-linejoin="round"
     />

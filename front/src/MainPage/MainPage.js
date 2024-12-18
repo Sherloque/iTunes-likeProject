@@ -2,13 +2,17 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import Chart from "./Chart";
 import RecentUploads from "./RecentUploads";
 import "./MainPage.scss";
 import { LoginIcon, ProfileIcon, SignUpIcon, LogoutIcon } from "assets";
-import { fetchSearch } from "../store/action";
+import {
+  fetchSearch,
+  fetchHotChart,
+  fetchRecentUploads,
+} from "../store/action";
 
 import Player from "./Player";
+import SongList from "SongList/SongList";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -94,12 +98,22 @@ const MainPage = () => {
               }}
             />
             <h2>Deezer Hot 10 Chart</h2>
-            <Chart />
+            <SongList
+              fetchAction={fetchHotChart}
+              selector={(state) => state.chart.chartSongs?.data || []}
+              renderEmpty="No chart data available."
+              renderLoading="Loading charts..."
+            />
           </section>
 
           <section className="uploads-section">
             <h2>Recent Uploads</h2>
-            <RecentUploads />
+            <SongList
+              fetchAction={fetchRecentUploads}
+              selector={(state) => state.recent.recentUploads || []}
+              renderEmpty="No recent uploads available."
+              renderLoading="Loading recent uploads..."
+            />
           </section>
         </>
         {track && <Player track={track}></Player>}
@@ -107,10 +121,10 @@ const MainPage = () => {
       <footer className="mainpage-footer">
         <p>&copy; 2024 PLATFORMNAME. All rights reserved.</p>
       </footer>
-      <div class="background-effect effect-1"></div>
-      <div class="background-effect effect-2"></div>
-      <div class="background-effect effect-3"></div>
-      <div class="background-effect effect-4"></div>
+      <div className="background-effect effect-1"></div>
+      <div className="background-effect effect-2"></div>
+      <div className="background-effect effect-3"></div>
+      <div className="background-effect effect-4"></div>
     </div>
   );
 };

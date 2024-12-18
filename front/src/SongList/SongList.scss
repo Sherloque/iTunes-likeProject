@@ -1,0 +1,35 @@
+.song {
+  display: flex;
+  align-items: center;
+
+  .chart-position {
+    width: 8px;
+    margin-right: 10px;
+  }
+
+  &-cover {
+    height: 75px;
+    width: 75px;
+    margin: 0px 10px;
+  }
+
+  &-title {
+    font-weight: 600;
+    color: #3f3434;
+  }
+
+  &-artist {
+    color: #848484;
+    opacity: 80%;
+  }
+
+  &-description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &-duration {
+    margin-left: auto;
+  }
+}

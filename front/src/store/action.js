@@ -37,9 +37,9 @@ export const getSearchResults = results => ({
     payload: results
 })
 
-export const getRecentUploads = fresh => ({
+export const getRecentUploads = recent => ({
     type: 'GET_RECENT',
-    payload: fresh
+    payload: recent
 })
   
   export const playSong = (preview, track) => ({

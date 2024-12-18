@@ -8,3 +8,5 @@ export * from "./ExpandIcon";
 export * from "./MinimizeIcon";
 export * from "./PlayIcon";
 export * from "./PauseIcon";
+export * from "./FavouriteIcon";
+

@@ -13,6 +13,6 @@ export default combineReducers({
   favourites: favouriteReducer,
   userUploads: useruploadsReducer,
   searchResults: searchReducer,
-  fresh: recentUploadsReducer,
+  recent: recentUploadsReducer,
   player: playerReducer,
 });

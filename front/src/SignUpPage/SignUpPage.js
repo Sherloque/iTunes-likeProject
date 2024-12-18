@@ -139,8 +139,8 @@ const SignUpPage = () => {
           </button>
         </div>
       </div>
-      <div class="background-effect effect-1"></div>
-      <div class="background-effect effect-2"></div>
+      <div className="background-effect effect-1"></div>
+      <div className="background-effect effect-2"></div>
     </div>
   );
 };
