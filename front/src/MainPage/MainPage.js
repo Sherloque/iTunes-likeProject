@@ -2,7 +2,6 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import RecentUploads from "./RecentUploads";
 import "./MainPage.scss";
 import { LoginIcon, ProfileIcon, SignUpIcon, LogoutIcon } from "assets";
 import {
@@ -18,9 +17,6 @@ const MainPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const track = useSelector((state) => state.player.trackInfo);
-  const searchResults = useSelector(
-    (store) => store.searchResults.searchResults
-  );
 
   const handleLogout = () => {
     localStorage.removeItem("token");

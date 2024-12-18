@@ -10,8 +10,8 @@ export const MinimizedIcon = () => (
       d="M10 24H38"
       stroke="#3F3434"
       strokeWidth="4"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );

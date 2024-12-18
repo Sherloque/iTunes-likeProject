@@ -31,7 +31,9 @@ const SongList = ({
       />
       <div className="song-description">
         <p className="song-title">{item.title || "Unknown Title"}</p>
-        <p className="song-artist">{item.artist?.name || item.artist || "Unknown Artist"}</p>
+        <p className="song-artist">
+          {item.artist?.name || item.artist || "Unknown Artist"}
+        </p>
       </div>
       <p className="song-duration">
         {item.duration

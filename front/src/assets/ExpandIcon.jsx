@@ -10,8 +10,8 @@ export const ExpandIcon = () => (
         d="M36 30L24 18L12 30"
         stroke="#3F3434"
         strokeWidth="4"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

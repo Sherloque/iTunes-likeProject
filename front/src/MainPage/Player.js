@@ -6,10 +6,17 @@ import {
   stopSong,
   updateTime,
   setDuration,
+  toFavourites,
 } from "../store/action";
 import "./Player.scss";
-import { ReactComponent as StopSVG } from "./logos/stop.svg";
-import { ExpandIcon, MinimizedIcon, PauseIcon, PlayIcon } from "assets";
+import { jwtDecode } from "jwt-decode";
+import {
+  ExpandIcon,
+  MinimizedIcon,
+  PauseIcon,
+  PlayIcon,
+  FavouriteIcon,
+} from "assets";
 
 function getTime(time) {
   return !isNaN(time)
@@ -51,6 +58,19 @@ const Player = ({ track }) => {
 
   const handlePlay = () => {
     dispatch(playSong(track.preview, track));
+  };
+
+  const handleAddToFavourites = () => {
+    const userId = jwtDecode(localStorage.token).sub._id;
+    dispatch(
+      toFavourites(
+        userId,
+        track.id,
+        track.artist.name,
+        track.title,
+        track.preview
+      )
+    );
   };
 
   const progressPercentage = (currentTime / trackDuration) * 100 || 0;
@@ -108,8 +128,16 @@ const Player = ({ track }) => {
             <PlayIcon />
           </button>
         )}
-        <button onClick={() => dispatch(stopSong())}>
+        {/*<button onClick={() => dispatch(stopSong())}>
           <StopSVG />
+        </button>
+       */}
+        <button
+          className
+          hidden={window.location.pathname === "/profile"}
+          onClick={handleAddToFavourites}
+        >
+          <FavouriteIcon />
         </button>
       </div>
 

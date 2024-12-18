@@ -101,7 +101,6 @@ export const signUser = (login, password, firstname, lastname, navigate) => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.err) {
                     alert('Login was already taken')
                 } else {
@@ -168,9 +167,9 @@ export const toFavourites = (owner, id, artist, title, preview) => dispatch => {
         .then(data => {
             if (data.err) {
                 console.log(data.err)
-                alert('Песня уже в избранных!')
+                alert('This sont is already favoured')
             } else {
-                alert('Добавлена в избранные')
+                alert('Added to favourites')
             }
         })
 }

@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import {
   changeUserInfo,
   fetchPersonalFavourites,
   fetchPersonalUploads,
 } from "../store/action.js";
-import Favourites from "./Favourites";
-import UserUploads from "./UserUploads";
 import Upload from "../Upload/Upload";
 import "./ProfilePage.scss";
 import { EditProfileIcon } from "assets/index.js";
 import SongList from "SongList/SongList.js";
+import Player from "MainPage/Player.js";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const user = token ? jwtDecode(token).sub : null;
-  console.log(user);
 
   const [login, setLogin] = useState(user?.login || "");
   const [password, setPassword] = useState("");
@@ -33,6 +31,8 @@ const ProfilePage = () => {
     setValid(login.length > 0 && firstname.length > 0 && lastname.length > 0);
     setValidPass(password === verpass);
   }, [login, firstname, lastname, password, verpass]);
+
+  const track = useSelector((state) => state.player.trackInfo);
 
   const handleSubmit = () => {
     if (user?._id) {
@@ -86,6 +86,7 @@ const ProfilePage = () => {
           fetchParams={user._id}
         />
       </div>
+      {track && <Player track={track}></Player>}
 
       <div className="background-effect effect-1"></div>
       <div className="background-effect effect-2"></div>
