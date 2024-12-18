@@ -71,7 +71,7 @@ const Player = ({ track }) => {
               {trackInfo?.title || "Song Title"}
             </div>
             <div className="track-info-artist">
-              {trackInfo?.artist?.name || "Artist"}
+              {trackInfo?.artist?.name || trackInfo?.artist || "Artist"}
             </div>
           </div>
         </>

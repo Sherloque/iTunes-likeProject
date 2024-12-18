@@ -68,8 +68,9 @@ var User = mongoose.model('User', userSchema)
 var trackSchema = new mongoose.Schema({
   id: String,
   artist: String,
-  songname: String,
-  preview: String
+  title: String,
+  preview: String,
+  duration: String
 
 })
 
@@ -232,7 +233,7 @@ app.post('/favor', async (req, res) => {
       }
     }
     else {
-      let newTrack = new Track({ id: req.body.id, artist: req.body.artist, songname: req.body.songname, preview: req.body.preview })
+      let newTrack = new Track({ id: req.body.id, artist: req.body.artist, title: req.body.title, preview: req.body.preview, duration:req.body.duration })
       await newTrack.save();
       let updPlaylist = Playlist.findOneAndUpdate(
         { owner: req.body.owner, type: type },
@@ -299,8 +300,8 @@ app.post('/upload', uploadTrack.single("file"), async (req, res) => {
    let newTrack  = new Track({})
     newTrack.id = "id" + sha256File(req.file.path)
     newTrack.artist = getPart(req.file.originalname, 0)
-    newTrack.songname = getPart(req.file.originalname, 1)
-    newTrack.preview = "http://127.0.0.1:8887/" + req.file.path.substr(22);
+    newTrack.title = getPart(req.file.originalname, 1)
+    newTrack.preview = "http://127.0.0.1:8887/" + req.file.path.substr(35);
     await newTrack.save();
     await songToPlaylist(owner,type, newTrack._id)
   }

@@ -154,7 +154,7 @@ export const fetchHotChart = () => dispatch => {
 }
 
 
-export const toFavourites = (owner, id, artist, songname, preview) => dispatch => {
+export const toFavourites = (owner, id, artist, title, preview) => dispatch => {
     fetch('/favor', {
         method: 'POST',
         headers: {
@@ -162,7 +162,7 @@ export const toFavourites = (owner, id, artist, songname, preview) => dispatch =
             'Content-Type': 'application/json',
             Accept: 'application/json',
         },
-        body: JSON.stringify({ owner, id, artist, songname, preview })
+        body: JSON.stringify({ owner, id, artist, title, preview })
     })
         .then(res => res.json())
         .then(data => {
