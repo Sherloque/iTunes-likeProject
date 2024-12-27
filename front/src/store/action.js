@@ -29,11 +29,6 @@ export const getPersonalUploads = uploads => ({
     payload: uploads
 })
 
-export const loginUser = user => ({
-    type: LOGIN_USER,
-    payload: user
-})
-
 export const upSong = file => ({
     type: UPLOAD_SONG,
     payload: file
@@ -72,28 +67,6 @@ export const getRecentUploads = recent => ({
     payload: duration,
   });
 
-export const logUser = (login, password, navigate) => {
-    return dispatch => {
-        return fetch("/login", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify({ login, password })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.err) {
-                    alert('Неправильный логин или пароль')
-                } else {
-                    localStorage.setItem("token", data.token)
-                    dispatch(loginUser(data.userInfo))
-                    navigate('/feed');
-                }
-            })
-    }
-}
 
 
 export const signUser = (login, password, firstname, lastname, navigate) => {
@@ -113,7 +86,7 @@ export const signUser = (login, password, firstname, lastname, navigate) => {
                 } else {
                     dispatch({ type: 'REGISTERED' })
                     localStorage.setItem("token", data.token)
-                    dispatch(loginUser(data.userInfo))
+                    //dispatch(loginUser(data.userInfo))
                     navigate('/feed');
                 }
             })
