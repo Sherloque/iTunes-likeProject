@@ -7,7 +7,6 @@ import {
     GET_HOT_CHART,
     GET_FAVOURITES,
     GET_UPLOADS,
-    LOGIN_USER,
     UPLOAD_SONG,
     GET_SEARCH_RESULTS,
     GET_RECENT
@@ -112,7 +111,7 @@ export const changeUserInfo = (id, login, firstname, lastname, password) => {
                     alert('Что то пошло не так')
                 } else {
                     localStorage.setItem("token", data.token)
-                    dispatch(loginUser(data.updUserInfo))
+                    //dispatch(loginUser(data.updUserInfo))
                     alert('Информация успешно изменена')
                 }
             })

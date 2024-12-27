@@ -4,7 +4,6 @@ export const STOP_SONG = "STOP_SONG";
 export const UPDATE_TIME = "UPDATE_TIME";
 export const SET_DURATION = "SET_DURATION";
 export const GET_FAVOURITES = "GET_FAVOURITES";
-export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const GET_RECENT = "GET_RECENT";
 export const GET_SEARCH_RESULTS = "GET_SEARCH_RESULTS";
