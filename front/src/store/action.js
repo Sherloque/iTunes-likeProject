@@ -4,41 +4,48 @@ import {
     STOP_SONG,
     UPDATE_TIME,
     SET_DURATION,
+    GET_HOT_CHART,
+    GET_FAVOURITES,
+    GET_UPLOADS,
+    LOGIN_USER,
+    UPLOAD_SONG,
+    GET_SEARCH_RESULTS,
+    GET_RECENT
   } from "./actionTypes";
 
 
 export const getHotChart = chart => ({
-    type: 'GET_HOT_CHART',
+    type: GET_HOT_CHART,
     payload: chart
 })
 
 export const getFavourites = faves => ({
-    type: 'GET_FAVOURITES',
+    type: GET_FAVOURITES,
     payload: faves
 })
 
 export const getPersonalUploads = uploads => ({
-    type: 'GET_UPLOADS',
+    type: GET_UPLOADS,
     payload: uploads
 })
 
 export const loginUser = user => ({
-    type: 'LOGIN_USER',
+    type: LOGIN_USER,
     payload: user
 })
 
 export const upSong = file => ({
-    type: 'UPLOAD_SONG',
+    type: UPLOAD_SONG,
     payload: file
 })
 
 export const getSearchResults = results => ({
-    type: 'GET_SEARCH_RESULTS',
+    type: GET_SEARCH_RESULTS,
     payload: results
 })
 
 export const getRecentUploads = recent => ({
-    type: 'GET_RECENT',
+    type: GET_RECENT,
     payload: recent
 })
   

@@ -10,3 +10,4 @@ export const GET_RECENT = "GET_RECENT";
 export const GET_SEARCH_RESULTS = "GET_SEARCH_RESULTS";
 export const GET_HOT_CHART = "GET_HOT_CHART";
 export const GET_UPLOADS = "GET_UPLOADS";
+export const UPLOAD_SONG = "UPLOAD_SONG";
