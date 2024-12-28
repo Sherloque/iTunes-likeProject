@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { signUser } from "../store/action.js";
+import { useDispatch, useSelector } from "react-redux";
+import { signUser } from "../store/reducers/auth.reducer";
 import "./SignUpPage.scss";
 
 const SignUpPage = () => {
@@ -17,6 +17,7 @@ const SignUpPage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { error, isLoading } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,13 +44,13 @@ const SignUpPage = () => {
 
   const handleSignUp = () => {
     dispatch(
-      signUser(
-        formData.login,
-        formData.password,
-        formData.firstname,
-        formData.lastname,
-        navigate
-      )
+      signUser({
+        login: formData.login,
+        password: formData.password,
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        navigate,
+      })
     );
   };
 
@@ -126,13 +127,13 @@ const SignUpPage = () => {
               placeholder="Enter your lastname"
             />
           </div>
-
+          {error && <p className="error-message">{error}</p>}{" "}
           <button
             className={`signup-btn ${!valid ? "disabled-btn" : ""}`}
-            disabled={!(valid && validPass)}
+            disabled={!(valid && validPass) || isLoading}
             onClick={handleSignUp}
           >
-            Sign Up
+            {isLoading ? "Signing Up..." : "Sign Up"}
           </button>
           <button className="cancel-btn">
             <Link to="/feed">Cancel</Link>

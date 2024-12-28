@@ -67,57 +67,6 @@ export const getRecentUploads = recent => ({
   });
 
 
-
-export const signUser = (login, password, firstname, lastname, navigate) => {
-    return dispatch => {
-        return fetch("/signup", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ login, password, firstname, lastname })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.err) {
-                    alert('Login was already taken')
-                } else {
-                    dispatch({ type: 'REGISTERED' })
-                    localStorage.setItem("token", data.token)
-                    //dispatch(loginUser(data.userInfo))
-                    navigate('/feed');
-                }
-            })
-    }
-}
-
-
-export const changeUserInfo = (id, login, firstname, lastname, password) => {
-    return dispatch => {
-        return fetch("/profile", {
-            method: "POST",
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.token,
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify({ id, login, firstname, lastname, password })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.message) {
-                    console.log(data.message)
-                    alert('Что то пошло не так')
-                } else {
-                    localStorage.setItem("token", data.token)
-                    //dispatch(loginUser(data.updUserInfo))
-                    alert('Информация успешно изменена')
-                }
-            })
-    }
-}
-
 export const fetchHotChart = () => dispatch => {
     fetch('/hotchart', {
         method: 'GET',

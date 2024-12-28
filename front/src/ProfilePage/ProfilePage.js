@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import {
-  changeUserInfo,
   fetchPersonalFavourites,
   fetchPersonalUploads,
 } from "../store/action.js";
@@ -12,6 +11,7 @@ import "./ProfilePage.scss";
 import { EditProfileIcon } from "assets/index.js";
 import SongList from "SongList/SongList.js";
 import Player from "MainPage/Player.js";
+import { changeUserInfo } from "store/reducers/auth.reducer.js";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -33,11 +33,14 @@ const ProfilePage = () => {
   }, [login, firstname, lastname, password, verpass]);
 
   const track = useSelector((state) => state.player.trackInfo);
+  const { error, isLoading } = useSelector((state) => state.auth);
 
   const handleSubmit = () => {
     if (user?._id) {
       dispatch(
-        changeUserInfo(user._id, login, firstname, lastname, password || null)
+        changeUserInfo(
+          { id: user._id, login, firstname, lastname, password } || null
+        )
       );
     }
   };
@@ -154,12 +157,13 @@ const ProfilePage = () => {
                 onChange={(e) => setVerpass(e.target.value)}
               />
             </div>
+            {error && <p className="error-message">{error}</p>}
             <button
               className="modal-submit-btn"
-              disabled={!(valid && validPass)}
+              disabled={!(valid && validPass) || isLoading}
               onClick={handleSubmit}
             >
-              Save
+              {isLoading ? "Saving" : "Save"}
             </button>
             <button
               className="modal-close-btn"
