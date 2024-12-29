@@ -1,16 +1,12 @@
 import { combineReducers } from "redux";
 import authReducer from "./auth.reducer";
-import chartReducer from "./topchart.reducer";
-import searchReducer from "./search.reducer";
-import recentUploadsReducer from "./recentuploads.reducer";
 import playerReducer from "./player.reducer";
 import userContentReducer from "./userContent.reducer";
+import exploreReducer from "./explore.reducer";
 
 export default combineReducers({
   auth: authReducer,
-  chart: chartReducer,
-  searchResults: searchReducer,
-  recent: recentUploadsReducer,
   player: playerReducer,
   userContent: userContentReducer,
+  explore: exploreReducer,
 });

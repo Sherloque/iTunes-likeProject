@@ -5,10 +5,10 @@ import { jwtDecode } from "jwt-decode";
 import "./MainPage.scss";
 import { LoginIcon, ProfileIcon, SignUpIcon, LogoutIcon } from "assets";
 import {
-  fetchSearch,
   fetchHotChart,
   fetchRecentUploads,
-} from "../store/action";
+  fetchSearch,
+} from "store/reducers/explore.reducer";
 
 import Player from "./Player";
 import SongList from "SongList/SongList";
@@ -96,7 +96,7 @@ const MainPage = () => {
             <h2>Deezer Hot 10 Chart</h2>
             <SongList
               fetchAction={fetchHotChart}
-              selector={(state) => state.chart.chartSongs?.data || []}
+              selector={(state) => state.explore.hotChart?.data || []}
               renderEmpty="No chart data available."
               renderLoading="Loading charts..."
             />
@@ -106,7 +106,7 @@ const MainPage = () => {
             <h2>Recent Uploads</h2>
             <SongList
               fetchAction={fetchRecentUploads}
-              selector={(state) => state.recent.recentUploads || []}
+              selector={(state) => state.explore.recentUploads || []}
               renderEmpty="No recent uploads available."
               renderLoading="Loading recent uploads..."
             />

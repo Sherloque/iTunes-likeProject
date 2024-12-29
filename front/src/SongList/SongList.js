@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { playSong } from "../store/action.js";
+import { playSong } from "../store/reducers/player.reducer";
 import "./SongList.scss";
 
 const SongList = ({
@@ -27,7 +27,9 @@ const SongList = ({
       <img
         className="song-cover"
         src={item.album?.cover || require("../assets/blank.png")}
-        onClick={() => dispatch(playSong(item.preview, item))}
+        onClick={() =>
+          dispatch(playSong({ preview: item.preview, track: item }))
+        }
       />
       <div className="song-description">
         <p className="song-title">{item.title || "Unknown Title"}</p>

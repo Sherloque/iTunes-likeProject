@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSearch } from "../store/action.js";
 import Player from "../MainPage/Player";
+import { fetchSearch } from "store/reducers/explore.reducer";
 
 const SearchPage = () => {
   const [value, setValue] = useState("");

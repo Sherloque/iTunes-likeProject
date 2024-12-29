@@ -6,7 +6,7 @@ import {
   stopSong,
   updateTime,
   setDuration,
-} from "../store/action";
+} from "../store/reducers/player.reducer";
 import "./Player.scss";
 import { jwtDecode } from "jwt-decode";
 import {
@@ -57,7 +57,7 @@ const Player = ({ track }) => {
   }, [dispatch]);
 
   const handlePlay = () => {
-    dispatch(playSong(track.preview, track));
+    dispatch(playSong({ preview: track.preview, track: track }));
   };
 
   const handleAddToFavourites = () => {

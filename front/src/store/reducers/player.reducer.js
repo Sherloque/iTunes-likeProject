@@ -1,11 +1,4 @@
-import {
-  PLAY_SONG,
-  PAUSE_SONG,
-  STOP_SONG,
-  UPDATE_TIME,
-  SET_DURATION,
-  RESUME_SONG,
-} from "../actionTypes";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   playerState: "stopped", // 'playing', 'paused', 'stopped'
@@ -15,46 +8,46 @@ const initialState = {
   trackDuration: 0,
 };
 
-const playerReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case PLAY_SONG:
-      return {
-        ...state,
-        playerState: "playing",
-        currentSong: action.payload.preview,
-        trackInfo: action.payload.track,
-        currentTime: 0,
-      };
+const playerSlice = createSlice({
+  name: "player",
+  initialState,
+  reducers: {
+    playSong(state, action) {
+      console.log(action);
+      state.playerState = "playing";
+      state.currentSong = action.payload.preview;
+      state.trackInfo = action.payload.track;
+      state.currentTime = 0;
+    },
+    pauseSong(state) {
+      state.playerState = "paused";
+    },
+    stopSong(state) {
+      state.playerState = "stopped";
+      state.currentSong = null;
+      state.currentTime = 0;
+    },
+    updateTime(state, action) {
+      state.currentTime = action.payload;
+    },
+    setDuration(state, action) {
+      state.trackDuration = action.payload;
+    },
+    resumeSong(state) {
+      if (state.playerState === "paused") {
+        state.playerState = "playing";
+      }
+    },
+  },
+});
 
-    case PAUSE_SONG:
-      return {
-        ...state,
-        playerState: "paused",
-      };
+export const {
+  playSong,
+  pauseSong,
+  stopSong,
+  updateTime,
+  setDuration,
+  resumeSong,
+} = playerSlice.actions;
 
-    case STOP_SONG:
-      return {
-        ...state,
-        playerState: "stopped",
-        currentSong: null,
-        currentTime: 0,
-      };
-
-    case UPDATE_TIME:
-      return {
-        ...state,
-        currentTime: action.payload,
-      };
-
-    case SET_DURATION:
-      return {
-        ...state,
-        trackDuration: action.payload,
-      };
-
-    default:
-      return state;
-  }
-};
-
-export default playerReducer;
+export default playerSlice.reducer;

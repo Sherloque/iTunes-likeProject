@@ -13,8 +13,9 @@ export const toFavourites = createAsyncThunk(
         },
         body: JSON.stringify({ owner, id, artist, title, preview }),
       });
+
       const data = await response.json();
-      console.log(data);
+
       if (!response.ok || data.err) {
         return rejectWithValue(data.err || "Failed to add to favourites");
       }
@@ -38,7 +39,9 @@ export const fetchPersonalFavourites = createAsyncThunk(
         },
         body: JSON.stringify({ owner }),
       });
+
       const data = await response.json();
+
       if (!response.ok || data.err) {
         return rejectWithValue(data.err || "Failed to fetch favourites");
       }
@@ -62,7 +65,9 @@ export const fetchPersonalUploads = createAsyncThunk(
         },
         body: JSON.stringify({ owner }),
       });
+
       const data = await response.json();
+
       if (!response.ok || data.err) {
         return rejectWithValue(data.err || "Failed to fetch uploads");
       }
