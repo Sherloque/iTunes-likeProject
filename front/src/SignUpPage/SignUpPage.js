@@ -66,7 +66,7 @@ const SignUpPage = () => {
         <div className="sign-box-form">
           <h1 className="sign-box-form-heading">Create Account</h1>
           <div className="sign-inputwrapper">
-            <label for="login">Username</label>
+            <label htmlFor="login">Username</label>
             <input
               required
               className="sign-input"
@@ -79,7 +79,7 @@ const SignUpPage = () => {
             />
           </div>
           <div className="sign-inputwrapper">
-            <label for="password">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               required
               className="sign-input"
@@ -92,7 +92,7 @@ const SignUpPage = () => {
             />
           </div>
           <div className="sign-inputwrapper">
-            <label for="subpass">Repeat password</label>
+            <label htmlFor="subpass">Repeat password</label>
             <input
               className="sign-input"
               type="password"
@@ -104,7 +104,7 @@ const SignUpPage = () => {
             />
           </div>
           <div className="sign-inputwrapper">
-            <label for="firstname">Firstname</label>
+            <label htmlFor="firstname">Firstname</label>
             <input
               className="sign-input"
               type="text"
@@ -116,7 +116,7 @@ const SignUpPage = () => {
             />
           </div>
           <div className="sign-inputwrapper">
-            <label for="lastname">Lastname</label>
+            <label htmlFor="lastname">Lastname</label>
             <input
               className="sign-input"
               type="text"

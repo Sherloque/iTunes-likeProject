@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import {
-  fetchPersonalFavourites,
-  fetchPersonalUploads,
-} from "../store/action.js";
 import Upload from "../Upload/Upload";
 import "./ProfilePage.scss";
 import { EditProfileIcon } from "assets/index.js";
 import SongList from "SongList/SongList.js";
 import Player from "MainPage/Player.js";
 import { changeUserInfo } from "store/reducers/auth.reducer.js";
+import {
+  fetchPersonalFavourites,
+  fetchPersonalUploads,
+} from "store/reducers/userContent.reducer.js";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -74,7 +74,7 @@ const ProfilePage = () => {
         <h1>Favourites</h1>
         <SongList
           fetchAction={fetchPersonalFavourites}
-          selector={(state) => state.favourites.favouriteSongs || []}
+          selector={(state) => state.userContent.favourites || []}
           renderEmpty="Empty! Start adding songs to your favourites now."
           renderLoading="Fetching personal favourites..."
           fetchParams={user._id}
@@ -83,7 +83,7 @@ const ProfilePage = () => {
         <h1>Your songs</h1>
         <SongList
           fetchAction={fetchPersonalUploads}
-          selector={(state) => state.userUploads.userUploads || []}
+          selector={(state) => state.userContent.uploads || []}
           renderEmpty="Empty! Start uploading your songs now."
           renderLoading="Fetching personal uploads..."
           fetchParams={user._id}
@@ -106,7 +106,7 @@ const ProfilePage = () => {
           <div className="modal-content">
             <h2 className="modal-heading">Edit your profile</h2>
             <div className="profile-inputwrapper">
-              <label for="username">Username</label>
+              <label htmlFor="username">Username</label>
               <input
                 className="profile-input"
                 placeholder="Username"
@@ -116,7 +116,7 @@ const ProfilePage = () => {
               />
             </div>
             <div className="profile-inputwrapper">
-              <label for="firstname">Firstname</label>
+              <label htmlFor="firstname">Firstname</label>
               <input
                 className="profile-input"
                 placeholder="Firstname"
@@ -126,7 +126,7 @@ const ProfilePage = () => {
               />
             </div>
             <div className="profile-inputwrapper">
-              <label for="lastname">Lastname</label>
+              <label htmlFor="lastname">Lastname</label>
               <input
                 className="profile-input"
                 placeholder="Lastname"
@@ -136,7 +136,7 @@ const ProfilePage = () => {
               />
             </div>
             <div className="profile-inputwrapper">
-              <label for="password">Password</label>
+              <label htmlFor="password">Password</label>
               <input
                 className="profile-input"
                 type="password"
@@ -147,7 +147,7 @@ const ProfilePage = () => {
               />
             </div>
             <div className="profile-inputwrapper">
-              <label for="verpass">Repeat password</label>
+              <label htmlFor="verpass">Repeat password</label>
               <input
                 className="profile-input"
                 type="password"

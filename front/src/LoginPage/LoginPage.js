@@ -42,7 +42,7 @@ const LoginPage = () => {
       <div className="login-box">
         <h1 className="login-heading">Welcome Back!</h1>
         <div className="login-inputwrapper">
-          <label for="login">Username</label>
+          <label htmlFor="login">Username</label>
           <input
             className="loginpage-login"
             id="login"
@@ -53,7 +53,7 @@ const LoginPage = () => {
           />
         </div>
         <div className="login-inputwrapper">
-          <label for="password">Password</label>
+          <label htmlFor="password">Password</label>
           <input
             className="loginpage-password"
             id="password"

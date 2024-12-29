@@ -6,7 +6,6 @@ import {
   stopSong,
   updateTime,
   setDuration,
-  toFavourites,
 } from "../store/action";
 import "./Player.scss";
 import { jwtDecode } from "jwt-decode";
@@ -17,6 +16,7 @@ import {
   PlayIcon,
   FavouriteIcon,
 } from "assets";
+import { toFavourites } from "store/reducers/userContent.reducer";
 
 function getTime(time) {
   return !isNaN(time)
@@ -63,13 +63,13 @@ const Player = ({ track }) => {
   const handleAddToFavourites = () => {
     const userId = jwtDecode(localStorage.token).sub._id;
     dispatch(
-      toFavourites(
-        userId,
-        track.id,
-        track.artist.name,
-        track.title,
-        track.preview
-      )
+      toFavourites({
+        owner: userId,
+        id: track.id,
+        artist: track.artist.name,
+        title: track.title,
+        preview: track.preview,
+      })
     );
   };
 
