@@ -2,7 +2,6 @@ import React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "MainPage/MainPage";
-import SearchPage from "SearchPage/SearchPage";
 import LoginPage from "LoginPage/LoginPage";
 import SignUpPage from "SignUpPage/SignUpPage";
 import ProfilePage from "ProfilePage/ProfilePage";
@@ -17,7 +16,6 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/search" element={<SearchPage />} />
         </Routes>
       </Router>
     </Provider>
