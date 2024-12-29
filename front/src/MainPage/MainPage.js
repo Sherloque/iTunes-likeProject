@@ -9,6 +9,8 @@ import {
   fetchRecentUploads,
   fetchSearch,
 } from "store/reducers/explore.reducer";
+import { logoutUser } from "store/reducers/auth.reducer";
+
 
 import Player from "./Player";
 import SongList from "SongList/SongList";
@@ -19,8 +21,7 @@ const MainPage = () => {
   const track = useSelector((state) => state.player.trackInfo);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    dispatch({ type: "LOGOUT_USER" });
+    dispatch(logoutUser());
     navigate("/login");
   };
 
