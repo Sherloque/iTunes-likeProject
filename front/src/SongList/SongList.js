@@ -16,7 +16,7 @@ const SongList = ({
   useEffect(() => {
     if (fetchParams) {
       dispatch(fetchAction(fetchParams));
-    } else {
+    } else if (fetchAction) {
       dispatch(fetchAction());
     }
   }, [dispatch, fetchAction, fetchParams]);

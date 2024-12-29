@@ -333,17 +333,33 @@ app.post('/peruploads', async (req, res) => {
 })
 
 
-app.post('/search', async (req, res) => {
-let searchResults = await Track.find({ artist:  new RegExp(req.body.value, 'i')})
-if(searchResults)
-res.send(searchResults)
-else{
-  res.status(404).json({
-    err:'NO SONGS'
-  })
-}
-})
+app.get('/search', async (req, res) => {
+  try {
+    const searchValue = req.query.value;
+    if (!searchValue) {
+      return res.status(400).json({ err: 'Search value is required' });
+    }
 
+    const searchResults = await Track.find({
+      $or: [
+        { artist: new RegExp(searchValue, 'i') },
+        { title: new RegExp(searchValue, 'i') },
+      ],
+    });
+
+    if (searchResults.length > 0) {
+      res.json(searchResults);
+    } else {
+      res.status(404).json({
+        err: 'No songs match your search criteria',
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      err: 'An error occurred while searching',
+    });
+  }
+});
 
 app.get('/recentuploads', async (req,res) => {
 let sorted = await Track.find({id: /id/}).sort({_id:1})

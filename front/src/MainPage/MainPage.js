@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
@@ -10,7 +10,7 @@ import {
   fetchSearch,
 } from "store/reducers/explore.reducer";
 import { logoutUser } from "store/reducers/auth.reducer";
-
+import debounce from "lodash.debounce";
 
 import Player from "./Player";
 import SongList from "SongList/SongList";
@@ -19,11 +19,22 @@ const MainPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const track = useSelector((state) => state.player.trackInfo);
+  const [searchText, setSearchText] = useState("");
+  const searchResults = useSelector((state) => state.explore.searchResults);
 
   const handleLogout = () => {
     dispatch(logoutUser());
     navigate("/login");
   };
+
+  const debouncedSearch = useCallback(
+    debounce((e) => {
+      setSearchText(e.target.value);
+      if (e.target.value.trim() === "") return;
+      dispatch(fetchSearch(e.target.value));
+    }, 300),
+    []
+  );
 
   const token = localStorage.getItem("token");
   const userLogin = token ? jwtDecode(token).sub.login : null;
@@ -88,19 +99,32 @@ const MainPage = () => {
               type="text"
               className="chart-section-search"
               placeholder="Search..."
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  dispatch(fetchSearch(e.target.value));
-                }
-              }}
+              onChange={debouncedSearch}
             />
-            <h2>Deezer Hot 10 Chart</h2>
-            <SongList
-              fetchAction={fetchHotChart}
-              selector={(state) => state.explore.hotChart?.data || []}
-              renderEmpty="No chart data available."
-              renderLoading="Loading charts..."
-            />
+            {searchText.trim() ? (
+              <>
+                <h2>Search Results</h2>
+                {searchResults && searchResults.length > 0 ? (
+                  <SongList
+                    selector={(state) => state.explore.searchResults || []}
+                    renderEmpty="No search results available."
+                    renderLoading="Loading search results..."
+                  />
+                ) : (
+                  <p>No results found</p>
+                )}
+              </>
+            ) : (
+              <>
+                <h2>Deezer Hot 10 Chart</h2>
+                <SongList
+                  fetchAction={fetchHotChart}
+                  selector={(state) => state.explore.hotChart?.data || []}
+                  renderEmpty="No chart data available."
+                  renderLoading="Loading charts..."
+                />
+              </>
+            )}
           </section>
 
           <section className="uploads-section">

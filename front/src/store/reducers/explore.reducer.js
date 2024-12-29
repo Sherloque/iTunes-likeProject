@@ -28,20 +28,21 @@ export const fetchSearch = createAsyncThunk(
   "explore/fetchSearch",
   async (value, { rejectWithValue }) => {
     try {
-      const response = await fetch("/search", {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + localStorage.token,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ value }),
-      });
+      const response = await fetch(
+        `/search?value=${encodeURIComponent(value)}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + localStorage.token,
+            Accept: "application/json",
+          },
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok || data.err) {
-        return rejectWithValue(data.err || "Invalid username or password");
+        return rejectWithValue(data.err || "Error during search");
       }
 
       return data;
@@ -50,7 +51,6 @@ export const fetchSearch = createAsyncThunk(
     }
   }
 );
-
 
 export const fetchRecentUploads = createAsyncThunk(
   "explore/fetchRecentUploads",
@@ -127,6 +127,7 @@ const exploreSlice = createSlice({
       .addCase(fetchSearch.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+        state.searchResults = [];
       });
   },
 });
