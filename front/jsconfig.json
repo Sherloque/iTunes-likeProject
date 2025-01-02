@@ -3,5 +3,5 @@
     "baseUrl": "src",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src"]
+  "include": ["src", "components/Player.js", "components/Dropzone.js", "components/Progress.js", "public/assets"]
 }

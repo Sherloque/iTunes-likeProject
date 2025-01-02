@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import Upload from "../Upload/Upload";
-import "./ProfilePage.scss";
-import { EditProfileIcon } from "assets/index.js";
-import SongList from "SongList/SongList.js";
-import Player from "MainPage/Player.js";
-import { changeUserInfo } from "store/reducers/auth.reducer.js";
+import Upload from "../components/Upload.js";
+import "../styles/profile.module.scss";
+import { EditProfileIcon } from "../public/assets";
+import SongList from "../components/SongList.js";
+import Player from "../components/Player.js";
+import { changeUserInfo } from "../src/store/reducers/auth.reducer.js";
 import {
   fetchPersonalFavourites,
   fetchPersonalUploads,
-} from "store/reducers/userContent.reducer.js";
+} from "../src/store/reducers/userContent.reducer.js";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();

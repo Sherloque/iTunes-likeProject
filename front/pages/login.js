@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../store/reducers/auth.reducer";
-import "./LoginPage.scss";
+import { loginUser } from "../src/store/reducers/auth.reducer";
+import "../styles/login.module.scss";
 
 const LoginPage = () => {
   const [login, setLogin] = useState("");
@@ -10,7 +10,7 @@ const LoginPage = () => {
   const [valid, setValid] = useState(false);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const { isLoading, error } = useSelector((state) => state.auth);
 
@@ -33,7 +33,7 @@ const LoginPage = () => {
   const handleLoginClick = () => {
     dispatch(loginUser({ login, password }))
       .unwrap()
-      .then(() => navigate("/feed"))
+      .then(() => router("/feed"))
       .catch((err) => console.error(err));
   };
 

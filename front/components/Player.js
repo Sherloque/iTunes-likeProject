@@ -6,8 +6,8 @@ import {
   stopSong,
   updateTime,
   setDuration,
-} from "../store/reducers/player.reducer";
-import "./Player.scss";
+} from "../src/store/reducers/player.reducer";
+import "../styles/player.module.scss";
 import { jwtDecode } from "jwt-decode";
 import {
   ExpandIcon,
@@ -15,7 +15,7 @@ import {
   PauseIcon,
   PlayIcon,
   FavouriteIcon,
-} from "assets";
+} from "../public/assets";
 import { toFavourites } from "store/reducers/userContent.reducer";
 
 function getTime(time) {
@@ -101,6 +101,7 @@ const Player = ({ track }) => {
         <span>{getTime(currentTime)}</span>
         <input
           type="range"
+          className="player-progress-input"
           min="0"
           max={trackDuration || 0}
           value={currentTime}
@@ -114,7 +115,7 @@ const Player = ({ track }) => {
       {isExpanded && (
         <img
           className="song-cover"
-          src={trackInfo?.album?.cover || require("../assets/blank.png")}
+          src={trackInfo?.album?.cover || require("../public/assets/blank.png")}
         />
       )}
 

@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
-import Dropzone from "../Upload/Dropzone";
-import Progress from "../Upload/Progress";
+import Dropzone from "./Dropzone";
+import Progress from "./Progress";
 import { jwtDecode } from "jwt-decode";
-import "./Upload.scss";
+import "../styles/upload.module.scss";
 
 const Upload = () => {
   const [files, setFiles] = useState([]);

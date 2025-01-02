@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from "react-redux";
-import { signUser } from "../store/reducers/auth.reducer";
-import "./SignUpPage.scss";
+import { signUser } from "../src/store/reducers/auth.reducer";
+import "../styles/signup.module.scss";
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ const SignUpPage = () => {
   const [valid, setValid] = useState(false);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { error, isLoading } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
@@ -49,7 +49,7 @@ const SignUpPage = () => {
         password: formData.password,
         firstname: formData.firstname,
         lastname: formData.lastname,
-        navigate,
+        router,
       })
     );
   };

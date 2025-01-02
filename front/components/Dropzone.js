@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
-import "./Dropzone.scss";
-import { NoteIcon } from "assets";
+import "../styles/dropzone.module.scss";
+import { NoteIcon } from "../public/assets";
 
 const Dropzone = ({ disabled, onFilesAdded }) => {
   const [highlight, setHighlight] = useState(false);
