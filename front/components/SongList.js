@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { playSong } from "../src/store/reducers/player.reducer";
-import "../styles/songlist.module.scss";
+import styles from "../styles/songlist.module.scss";
 
 const SongList = ({
   fetchAction,
@@ -22,22 +22,25 @@ const SongList = ({
   }, [dispatch, fetchAction, fetchParams]);
 
   const renderSong = (item, i) => (
-    <div className="song" key={i}>
-      <p className="chart-position">{item.position || "-"}</p>
+    <div className={`${styles["song"]}`} key={i}>
+      <p className={`${styles["chart-position"]}`}>{item.position || "-"}</p>
       <img
-        className="song-cover"
-        src={item.album?.cover || require("../public/assets/blank.png")}
+        className={`${styles["song-cover"]}`}
+        src={item.album?.cover}
+        alt={"/assets/blank.png"}
         onClick={() =>
           dispatch(playSong({ preview: item.preview, track: item }))
         }
       />
-      <div className="song-description">
-        <p className="song-title">{item.title || "Unknown Title"}</p>
-        <p className="song-artist">
+      <div className={`${styles["song-description"]}`}>
+        <p className={`${styles["song-title"]}`}>
+          {item.title || "Unknown Title"}
+        </p>
+        <p className={`${styles["song-artist"]}`}>
           {item.artist?.name || item.artist || "Unknown Artist"}
         </p>
       </div>
-      <p className="song-duration">
+      <p className={`${styles["song-duration"]}`}>
         {item.duration
           ? Math.floor(item.duration / 60) +
             ":" +
@@ -48,17 +51,17 @@ const SongList = ({
   );
 
   if (!songs) {
-    return <p className="load-placeholder">{renderLoading}</p>;
+    return <p className={`${styles["load-placeholder"]}`}>{renderLoading}</p>;
   }
 
   const songsArray = Array.isArray(songs) ? songs : [];
 
   if (songsArray.length === 0) {
-    return <p className="empty-placeholder">{renderEmpty}</p>;
+    return <p className={`${styles["empty-placeholder"]}`}>{renderEmpty}</p>;
   }
 
   return (
-    <div className="song-list">
+    <div className={`${styles["song-list"]}`}>
       {songsArray.map((item, i) => renderSong(item, i))}
     </div>
   );

@@ -3,17 +3,22 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchHotChart = createAsyncThunk(
   "explore/fetchHotChart",
   async (_, { rejectWithValue }) => {
+    console.log("poshlo");
+
     try {
-      const response = await fetch("/hotchart", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/hotchart`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
 
       const data = await response.json();
-
+      console.log(data);
       if (!response.ok || data.err) {
         return rejectWithValue(data.err || "Unable to fetch hot chart");
       }
