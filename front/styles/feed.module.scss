@@ -1,12 +1,12 @@
-.mainpageContainer {
+.mainpage-container {
   font-family: "Roboto", sans-serif;
   width: 70%;
   text-align: center;
   margin: 30px auto;
-  position: relative;
+
 }
 
-.backgroundEffect {
+.background-effect {
   position: absolute;
   z-index: -1;
   background: #2f06ff;
@@ -16,21 +16,22 @@
   pointer-events: none;
 }
 
-.backgroundEffect1 {
+.effect-1 {
   width: 1100px;
   height: 1100px;
   top: 0%;
   right: 0%;
 }
 
-.backgroundEffect2 {
+.effect-2 {
   width: 1300px;
   height: 1300px;
+
   top: 100%;
   left: 7%;
 }
 
-.backgroundEffect3 {
+.effect-3 {
   opacity: 70%;
   background: linear-gradient(
     143.57deg,
@@ -43,8 +44,7 @@
   right: 0%;
   top: 200%;
 }
-
-.backgroundEffect4 {
+.effect-4 {
   opacity: 90%;
   background: linear-gradient(
     143.57deg,
@@ -58,14 +58,14 @@
   top: -8px;
 }
 
-.mainpageHeader {
-  &Platformname {
+.mainpage-header {
+  &-platformname {
     font-weight: 700;
     font-size: 30px;
     margin-bottom: 75px;
   }
 
-  .mainpageNav {
+  nav {
     font-size: 32px;
     display: flex;
     flex-direction: column;
@@ -75,7 +75,7 @@
     top: 10px;
     gap: 20px;
 
-    .navLink {
+    .nav-link {
       display: flex;
       align-items: center;
     }
@@ -87,8 +87,8 @@
   }
 }
 
-.welcomeSection {
-  &Greeting {
+.welcome-section {
+  &-greeting {
     display: flex;
     justify-content: flex-end;
     background-color: white;
@@ -109,7 +109,7 @@
     border-radius: 60px;
     margin-bottom: 50px;
 
-    &Info::before {
+    &-info::before {
       content: " ";
       display: block;
       background: #878bfd;
@@ -117,22 +117,21 @@
       filter: blur(100px);
     }
 
-    &Info {
+    &-info {
       position: relative;
       padding-left: 60px;
-
-      &Platformname {
+      &-platformname {
         font-weight: 700;
         font-size: 30px;
         text-align: left;
       }
 
-      &BlurWrapper {
+      &-blur-wrapper {
         position: relative;
         padding-bottom: 75px;
       }
 
-      &BlurWrapper::before {
+      &-blur-wrapper::before {
         content: "";
         position: absolute;
         top: 0;
@@ -146,7 +145,7 @@
         pointer-events: none;
       }
 
-      &Subtitle {
+      &-subtitle {
         font-weight: 600;
         font-size: 96px;
         color: #2f2818;
@@ -156,7 +155,7 @@
         z-index: 1;
       }
 
-      &Description {
+      &-description {
         color: #3d3d3d;
         font-size: 48px;
         line-height: 60px;
@@ -165,21 +164,21 @@
       }
     }
 
-    &Image {
+    &-image {
       width: 50%;
       margin-right: 55px;
     }
   }
 }
 
-.chartSection {
+.chart-section {
   justify-content: flex-end;
   background-color: white;
   border-radius: 60px;
   padding: 25px 20px;
   margin-bottom: 25px;
 
-  &Search {
+  &-search {
     width: 90%;
     background-color: #ececec;
     border: none;
@@ -191,16 +190,9 @@
   }
 }
 
-.uploadsSection {
+.uploads-section {
   justify-content: flex-end;
   background-color: white;
   border-radius: 60px;
   padding: 25px 20px;
-}
-
-.mainpageFooter {
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  padding: 10px;
 }
