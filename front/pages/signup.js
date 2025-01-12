@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { signUser } from "../src/store/reducers/auth.reducer";
-import "../styles/signup.module.scss";
+import Link from "next/link";
+import styles from "../styles/signup.module.scss";
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -55,21 +56,25 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="signpage-container">
-      <div className="sign-box">
-        <div className="sign-box-login">
-          <h1 className="sign-box-login-heading">WELCOME BACK!</h1>
-          <button className="sign-box-login-btn">
-            <Link to="/login">Sign In</Link>
+    <div className={`${styles["signpage-container"]}`}>
+      <div className={`${styles["sign-box"]}`}>
+        <div className={`${styles["sign-box-login"]}`}>
+          <h1 className={`${styles["sign-box-login-heading"]}`}>
+            WELCOME BACK!
+          </h1>
+          <button className={`${styles["sign-box-login-btn"]}`}>
+            <Link href="/login">Sign In</Link>
           </button>
         </div>
-        <div className="sign-box-form">
-          <h1 className="sign-box-form-heading">Create Account</h1>
-          <div className="sign-inputwrapper">
+        <div className={`${styles["sign-box-form"]}`}>
+          <h1 className={`${styles["sign-box-form-heading"]}`}>
+            Create Account
+          </h1>
+          <div className={`${styles["sign-inputwrapper"]}`}>
             <label htmlFor="login">Username</label>
             <input
               required
-              className="sign-input"
+              className={`${styles["sign-input"]}`}
               type="text"
               id="login"
               name="login"
@@ -78,11 +83,11 @@ const SignUpPage = () => {
               placeholder="Enter your username"
             />
           </div>
-          <div className="sign-inputwrapper">
+          <div className={`${styles["sign-inputwrapper"]}`}>
             <label htmlFor="password">Password</label>
             <input
               required
-              className="sign-input"
+              className={`${styles["sign-input"]}`}
               type="password"
               id="password"
               name="password"
@@ -91,10 +96,10 @@ const SignUpPage = () => {
               placeholder="Enter your password"
             />
           </div>
-          <div className="sign-inputwrapper">
+          <div className={`${styles["sign-inputwrapper"]}`}>
             <label htmlFor="subpass">Repeat password</label>
             <input
-              className="sign-input"
+              className={`${styles["sign-input"]}`}
               type="password"
               id="subpass"
               name="subpass"
@@ -103,10 +108,10 @@ const SignUpPage = () => {
               placeholder="Repeat your password"
             />
           </div>
-          <div className="sign-inputwrapper">
+          <div className={`${styles["sign-inputwrapper"]}`}>
             <label htmlFor="firstname">Firstname</label>
             <input
-              className="sign-input"
+              className={`${styles["sign-input"]}`}
               type="text"
               id="firstname"
               name="firstname"
@@ -115,10 +120,10 @@ const SignUpPage = () => {
               placeholder="Enter your firstname"
             />
           </div>
-          <div className="sign-inputwrapper">
+          <div className={`${styles["sign-inputwrapper"]}`}>
             <label htmlFor="lastname">Lastname</label>
             <input
-              className="sign-input"
+              className={`${styles["sign-input"]}`}
               type="text"
               id="lastname"
               name="lastname"
@@ -127,21 +132,27 @@ const SignUpPage = () => {
               placeholder="Enter your lastname"
             />
           </div>
-          {error && <p className="error-message">{error}</p>}{" "}
+          {error && <p className={`${styles["error-message"]}`}>{error}</p>}{" "}
           <button
-            className={`signup-btn ${!valid ? "disabled-btn" : ""}`}
+            className={`${styles["signup-btn"]}   ${
+              !valid && styles["disabled-btn"]
+            }`}
             disabled={!(valid && validPass) || isLoading}
             onClick={handleSignUp}
           >
             {isLoading ? "Signing Up..." : "Sign Up"}
           </button>
-          <button className="cancel-btn">
-            <Link to="/feed">Cancel</Link>
+          <button className={`${styles["cancel-btn"]}`}>
+            <Link href="/feed">Cancel</Link>
           </button>
         </div>
       </div>
-      <div className="background-effect effect-1"></div>
-      <div className="background-effect effect-2"></div>
+      <div
+        className={`${styles["background-effect"]} ${styles["effect-1"]}`}
+      ></div>{" "}
+      <div
+        className={`${styles["background-effect"]} ${styles["effect-2"]}`}
+      ></div>
     </div>
   );
 };

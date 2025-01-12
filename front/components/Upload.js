@@ -2,7 +2,8 @@ import React, { useState, useCallback } from "react";
 import Dropzone from "./Dropzone";
 import Progress from "./Progress";
 import { jwtDecode } from "jwt-decode";
-import "../styles/upload.module.scss";
+import safeLocalStorage from "../src/safeLocalStorage";
+import styles from "../styles/upload.module.scss";
 
 const Upload = () => {
   const [files, setFiles] = useState([]);
@@ -18,7 +19,7 @@ const Upload = () => {
     const progress = uploadProgress[file.name];
     if (uploading || successfulUploaded) {
       return (
-        <div className="ProgressWrapper">
+        <div className={`${styles["ProgressWrapper"]}`}>
           <Progress progress={progress ? progress.percentage : 0} />
         </div>
       );
@@ -29,7 +30,7 @@ const Upload = () => {
     if (successfulUploaded) {
       return (
         <button
-          className="upload-btn"
+          className={`${styles["upload-btn"]}`}
           onClick={() => {
             setFiles([]);
             setSuccessfulUploaded(false);
@@ -41,7 +42,7 @@ const Upload = () => {
     } else {
       return (
         <button
-          className="upload-btn"
+          className={`${styles["upload-btn"]}`}
           disabled={uploading}
           onClick={() => {
             if (files.length === 0) {
@@ -106,10 +107,10 @@ const Upload = () => {
 
       const formData = new FormData();
       formData.append("file", file, file.name);
-      formData.append("field", jwtDecode(localStorage.token).sub._id);
+      formData.append("field", jwtDecode(safeLocalStorage.getItem("token")).sub._id);
 
       req.open("POST", "/upload");
-      req.setRequestHeader("Authorization", `Bearer ${localStorage.token}`);
+      req.setRequestHeader("Authorization", `Bearer ${safeLocalStorage.getItem("token")}`);
       req.send(formData);
 
       req.onreadystatechange = () => {
@@ -121,20 +122,20 @@ const Upload = () => {
   }, []);
 
   return (
-    <div className="upload">
+    <div className={`${styles["upload"]}`}>
       <Dropzone
         onFilesAdded={onFilesAdded}
         disabled={uploading || successfulUploaded}
       />
-      <div className="upload-files">
+      <div className={`${styles["upload-files"]}`}>
         {files.map((file) => (
-          <div key={file.name} className="upload-file-row">
-            <span className="upload-file">{file.name}</span>
+          <div key={file.name} className={`${styles["upload-file-row"]}`}>
+            <span className={`${styles["upload-file"]}`}>{file.name}</span>
             {renderProgress(file)}
           </div>
         ))}
       </div>
-      <div className="upload-actions">{renderActions()}</div>
+      <div className={`${styles["upload-actions"]}`}>{renderActions()}</div>
     </div>
   );
 };

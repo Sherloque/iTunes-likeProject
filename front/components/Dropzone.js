@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from "react";
-import "../styles/dropzone.module.scss";
+import styles from "../styles/dropzone.module.scss";
 import { NoteIcon } from "../public/assets";
 
 const Dropzone = ({ disabled, onFilesAdded }) => {
@@ -56,7 +56,7 @@ const Dropzone = ({ disabled, onFilesAdded }) => {
 
   return (
     <div
-      className={`dropzone ${highlight ? "highlight" : ""}`}
+      className={`${styles["dropzone"]} ${highlight && styles["highlight"]}`}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
@@ -65,14 +65,14 @@ const Dropzone = ({ disabled, onFilesAdded }) => {
     >
       <input
         ref={fileInputRef}
-        className="dropzone-fileinput"
+        className={`${styles["dropzone-fileinput"]}`}
         type="file"
         accept=".mp3,.WAV,.Ogg,.flac"
         multiple
         onChange={onFilesAddedHandler}
       />
-      <NoteIcon className="note-icon" />
-      <span className="dropzone-text">Drop your songs here</span>
+      <NoteIcon className={`${styles["note-icon"]}`} />
+      <span className={`${styles["dropzone-text"]}`}>Drop your songs here</span>
     </div>
   );
 };

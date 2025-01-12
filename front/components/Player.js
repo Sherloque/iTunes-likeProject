@@ -7,8 +7,9 @@ import {
   updateTime,
   setDuration,
 } from "../src/store/reducers/player.reducer";
-import "../styles/player.module.scss";
+import styles from "../styles/player.module.scss";
 import { jwtDecode } from "jwt-decode";
+import safeLocalStorage from "../src/safeLocalStorage";
 import {
   ExpandIcon,
   MinimizedIcon,
@@ -61,7 +62,7 @@ const Player = ({ track }) => {
   };
 
   const handleAddToFavourites = () => {
-    const userId = jwtDecode(localStorage.token).sub._id;
+    const userId = jwtDecode(safeLocalStorage.getItem("token")).sub._id;
     dispatch(
       toFavourites({
         owner: userId,
@@ -76,9 +77,13 @@ const Player = ({ track }) => {
   const progressPercentage = (currentTime / trackDuration) * 100 || 0;
 
   return (
-    <div className={`global-player ${isExpanded ? "expanded" : "minimized"}`}>
+    <div
+      className={`${styles["global-player"]} ${
+        isExpanded ? styles["expanded"] : styles["minimized"]
+      }`}
+    >
       <button
-        className="size-toggle"
+        className={`${styles["size-toggle"]}`}
         onClick={() => setIsExpanded(!isExpanded)}
       >
         {isExpanded ? <MinimizedIcon /> : <ExpandIcon />}
@@ -86,22 +91,22 @@ const Player = ({ track }) => {
 
       {isExpanded && (
         <>
-          <div className="track-info">
-            <div className="track-info-title">
+          <div className={`${styles["track-info"]}`}>
+            <div className={`${styles["track-info-title"]}`}>
               {trackInfo?.title || "Song Title"}
             </div>
-            <div className="track-info-artist">
+            <div className={`${styles["track-info-artist"]}`}>
               {trackInfo?.artist?.name || trackInfo?.artist || "Artist"}
             </div>
           </div>
         </>
       )}
 
-      <div className="player-progress">
+      <div className={`${styles["player-progress"]}`}>
         <span>{getTime(currentTime)}</span>
         <input
           type="range"
-          className="player-progress-input"
+          className={`${styles["player-progress-input"]}`}
           min="0"
           max={trackDuration || 0}
           value={currentTime}
@@ -114,12 +119,13 @@ const Player = ({ track }) => {
       </div>
       {isExpanded && (
         <img
-          className="song-cover"
-          src={trackInfo?.album?.cover || require("../public/assets/blank.png")}
+          className={`${styles["song-cover"]}`}
+          src={trackInfo?.album?.cover}
+          alt="/assets/blank.png"
         />
       )}
 
-      <div className="player-controls">
+      <div className={`${styles["player-controls"]}`}>
         {playerState === "playing" ? (
           <button onClick={() => dispatch(pauseSong())}>
             <PauseIcon />

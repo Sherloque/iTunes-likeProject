@@ -1,9 +1,12 @@
 import React from "react";
-import "../styles/progress.module.scss";
+import styles from "../styles/progress.module.scss";
 
 const Progress = ({ progress }) => (
-  <div className="ProgressBar">
-    <div className="Progress" style={{ width: `${progress}%` }} />
+  <div className={`${styles["ProgressBar"]}`}>
+    <div
+      className={`${styles["Progress"]}`}
+      style={{ width: `${progress}%` }}
+    />
   </div>
 );
 

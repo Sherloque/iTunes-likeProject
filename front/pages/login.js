@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from "react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../src/store/reducers/auth.reducer";
-import "../styles/login.module.scss";
+import Link from "next/link";
+import styles from "../styles/login.module.scss";
 
 const LoginPage = () => {
   const [login, setLogin] = useState("");
@@ -38,13 +39,13 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="loginpage-container">
-      <div className="login-box">
-        <h1 className="login-heading">Welcome Back!</h1>
-        <div className="login-inputwrapper">
+    <div className={`${styles["loginpage-container"]}`}>
+      <div className={`${styles["login-box"]}`}>
+        <h1 className={`${styles["login-heading"]}`}>Welcome Back!</h1>
+        <div className={`${styles["login-inputwrapper"]}`}>
           <label htmlFor="login">Username</label>
           <input
-            className="loginpage-login"
+            className={`${styles["loginpage-login"]}`}
             id="login"
             type="text"
             value={login}
@@ -52,10 +53,10 @@ const LoginPage = () => {
             placeholder="Enter your username"
           />
         </div>
-        <div className="login-inputwrapper">
+        <div className={`${styles["login-inputwrapper"]}`}>
           <label htmlFor="password">Password</label>
           <input
-            className="loginpage-password"
+            className={`${styles["loginpage-password"]}`}
             id="password"
             type="password"
             value={password}
@@ -63,25 +64,29 @@ const LoginPage = () => {
             placeholder="Enter your password"
           />
         </div>
-        {error && <p className="login-error">{error}</p>}
+        {error && <p className={`${styles["login-error"]}`}>{error}</p>}
         <button
-          className={`loginpage-login-btn ${
-            !valid || isLoading ? "disabled-btn" : ""
+          className={`${styles["loginpage-login-btn"]} ${
+            !valid || isLoading ? styles["disabled-btn"] : styles[""]
           }`}
           disabled={!valid || isLoading}
           onClick={handleLoginClick}
         >
           {isLoading ? "Signing In..." : "Sign In"}
         </button>
-        <button className="loginpage-cancel-btn">
-          <Link to="/feed">Cancel</Link>
+        <button className={`${styles["loginpage-cancel-btn"]}`}>
+          <Link href="/feed">Cancel</Link>
         </button>
-        <Link className="loginpage-signup-link" to="/signup">
+        <Link className={`${styles["loginpage-signup-link"]}`} href="/signup">
           I don't have an account
         </Link>
       </div>
-      <div className="background-effect effect-1"></div>
-      <div className="background-effect effect-2"></div>
+      <div
+        className={`${styles["background-effect"]} ${styles["effect-2"]}`}
+      ></div>
+      <div
+        className={`${styles["background-effect"]} ${styles["effect-2"]}`}
+      ></div>
     </div>
   );
 };

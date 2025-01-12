@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import styles from "../styles/feed.module.scss";
 import {
   LoginIcon,
@@ -16,18 +16,11 @@ import {
   fetchSearch,
 } from "../src/store/reducers/explore.reducer";
 import { logoutUser } from "../src/store/reducers/auth.reducer";
+import safeLocalStorage from "../src/safeLocalStorage";
 import debounce from "lodash.debounce";
 
 import Player from "../components/Player";
 import SongList from "../components/SongList";
-
-const safeLocalStorage = {
-  getItem: (key) =>
-    typeof window !== "undefined" ? localStorage.getItem(key) : null,
-  setItem: (key, value) => {
-    if (typeof window !== "undefined") localStorage.setItem(key, value);
-  },
-};
 
 const MainPage = () => {
   const router = useRouter();
