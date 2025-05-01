@@ -6,7 +6,7 @@ function getPart(str,index) {
      str.split('-')[index] : str;
 }
 
-module.exports = function upload(req, res) {
+function upload(req, res) {
   var form = new IncomingForm()
 
   form.on('file', async (field, file) => {
@@ -19,3 +19,5 @@ module.exports = function upload(req, res) {
   })
   form.parse(req)
 }
+
+module.exports = upload;

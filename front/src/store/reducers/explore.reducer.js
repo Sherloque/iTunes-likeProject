@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API_ROUTES } from "constants";
+import safeLocalStorage from "../../../src/safeLocalStorage";
 
 export const fetchHotChart = createAsyncThunk(
   "explore/fetchHotChart",
@@ -6,16 +8,13 @@ export const fetchHotChart = createAsyncThunk(
     console.log("poshlo");
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/hotchart`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      );
+      const response = await fetch(API_ROUTES.EXTERNAL.HOT_CHART, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
 
       const data = await response.json();
       console.log(data);
@@ -34,11 +33,11 @@ export const fetchSearch = createAsyncThunk(
   async (value, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `/search?value=${encodeURIComponent(value)}`,
+        API_ROUTES.TRACKS.SEARCH(value),
         {
           method: "GET",
           headers: {
-            Authorization: "Bearer " + localStorage.token,
+            Authorization: `Bearer ${safeLocalStorage.getItem("token")}`,
             Accept: "application/json",
           },
         }
@@ -61,10 +60,10 @@ export const fetchRecentUploads = createAsyncThunk(
   "explore/fetchRecentUploads",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("/recentuploads", {
+      const response = await fetch(API_ROUTES.TRACKS.RECENT_UPLOADS, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + localStorage.token,
+          Authorization: `Bearer ${safeLocalStorage.getItem("token")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },

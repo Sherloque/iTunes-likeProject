@@ -1,20 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API_ROUTES } from "constants";
+import safeLocalStorage from "../../../src/safeLocalStorage";
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ login, password }, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ login, password }),
-        }
-      );
+      const response = await fetch(API_ROUTES.AUTH.LOGIN, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ login, password }),
+      });
 
       const data = await response.json();
 
@@ -37,17 +36,14 @@ export const signUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/signup`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ login, password, firstname, lastname }),
-        }
-      );
+      const response = await fetch(API_ROUTES.AUTH.SIGNUP, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ login, password, firstname, lastname }),
+      });
 
       const data = await response.json();
 
@@ -58,7 +54,7 @@ export const signUser = createAsyncThunk(
       }
 
       localStorage.setItem("token", data.token);
-      router.push("/feed");
+      router.push("/feed"); // later move to component on fullfilment
       return data.userInfo;
     } catch (error) {
       return rejectWithValue(error.message || "An error occurred");
@@ -70,18 +66,15 @@ export const changeUserInfo = createAsyncThunk(
   "auth/changeUserInfo",
   async ({ id, login, firstname, lastname, password }, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/profile`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: "Bearer " + localStorage.token,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ id, login, firstname, lastname, password }),
-        }
-      );
+      const response = await fetch(API_ROUTES.AUTH.PROFILE_UPDATE, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${safeLocalStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ id, login, firstname, lastname, password }),
+      });
       const data = await response.json();
 
       if (!response.ok || data.err) {

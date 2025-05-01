@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API_ROUTES } from "constants";
+import safeLocalStorage from "../../../src/safeLocalStorage";
 
 export const toFavourites = createAsyncThunk(
   "userContent/toFavourites",
   async ({ owner, id, artist, title, preview }, { rejectWithValue }) => {
     try {
-      const response = await fetch("/favor", {
+      const response = await fetch(API_ROUTES.PLAYLISTS.FAVORITES.ADD, {
         method: "POST",
         headers: {
-          Authorization: "Bearer " + localStorage.token,
+          Authorization: `Bearer ${safeLocalStorage.getItem("token")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -30,10 +32,10 @@ export const fetchPersonalFavourites = createAsyncThunk(
   "userContent/fetchPersonalFavourites",
   async (owner, { rejectWithValue }) => {
     try {
-      const response = await fetch("/perfavor", {
-        method: "POST",
+      const response = await fetch(API_ROUTES.PLAYLISTS.FAVORITES.GET, {
+        method: "GET",
         headers: {
-          Authorization: "Bearer " + localStorage.token,
+          Authorization: `Bearer ${safeLocalStorage.getItem("token")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -56,10 +58,10 @@ export const fetchPersonalUploads = createAsyncThunk(
   "userContent/fetchPersonalUploads",
   async (owner, { rejectWithValue }) => {
     try {
-      const response = await fetch("/peruploads", {
-        method: "POST",
+      const response = await fetch(API_ROUTES.TRACKS.UPLOADED, {
+        method: "GET",
         headers: {
-          Authorization: "Bearer " + localStorage.token,
+          Authorization: `Bearer ${safeLocalStorage.getItem("token")}`,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
